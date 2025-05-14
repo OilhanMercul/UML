@@ -8,7 +8,7 @@ using namespace std;
 
 #include "AirCleaner.h"
 
-AirCleanner::AirCleaner(int id, std::string lat, std::string lon, Date start, Date end)
+AirCleaner::AirCleaner(int id, std::string lat, std::string lon, Date start, Date end)
     : id(id), latitude(lat), longitude(lon), start(start), end(end) {}
 
 AirCleaner::~AirCleaner() {}
