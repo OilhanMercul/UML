@@ -1,122 +1,127 @@
 #include "Service.h"
-using namespace std;
+#include <cmath>
 
-
-// Constructor
 Service::Service() {
+    // Constructor body if needed
 }
 
+// Returns (radius, improvement)
+std::pair<float, float> Service::displayImpactCleaners(const AirCleaner& airCleaner) {
+    std::vector<Measurement> beforeData, duringData, afterData;
 
-// Getters
-vector<Provider>& Service::getProviders() const {
-    return providers;
+    std::string lat = airCleaner.getLatitude();
+    std::string lon = airCleaner.getLongitude();
+    Date start = airCleaner.getStart();
+    Date end = airCleaner.getEnd();
+
+    std::vector<Measurement> nearby = getMeasurementsNear(lat, lon);
+
+    for (const auto& m : nearby) {
+        Date d = m.getDate();
+        if (d.year < start.year || (d.year == start.year && d.month < start.month) ||
+            (d.year == start.year && d.month == start.month && d.day < start.day)) {
+            beforeData.push_back(m);
+        } else if (d.year > end.year || (d.year == end.year && d.month > end.month) ||
+                   (d.year == end.year && d.month == end.month && d.day > end.day)) {
+            afterData.push_back(m);
+        } else {
+            duringData.push_back(m);
+        }
+    }
+
+    float avgBefore = computeAverage(beforeData);
+    float avgDuring = computeAverage(duringData);
+    float avgAfter = computeAverage(afterData);
+    float improvement = calculateImprovement(avgBefore, avgAfter);
+
+    float radius = 0.0f;
+
+    for (const auto& m : afterData) {
+        Sensor s = m.getSensor();
+        std::vector<Measurement> otherMs = getMeasurementsBySensor(s);
+
+        for (const auto& other : otherMs) {
+            float diff = std::fabs(m.getValue() - other.getValue());
+            if (diff <= 0.1f * other.getValue()) {
+                radius = determineDistance(m.getSensor(), other.getSensor());
+            }
+        }
+    }
+
+    return {radius, improvement};
 }
 
-vector<PrivateIndividual>& Service::getPrivateIndividuals() const {
-    return privateIndividuals;
+// Returns (airQualityIndex, meanIndex)
+std::pair<float, float> Service::getAirQuality(const std::string& lat, const std::string& lon, const Date& date) {
+    std::vector<Measurement> all = getMeasurementsByDate(date);
+    std::vector<Measurement> valid;
+    std::vector<Attribut> attribList;
+
+    for (const auto& m : all) {
+        Sensor s = m.getSensor();
+        if (s.getLatitude() == lat && s.getLongitude() == lon) {
+            valid.push_back(m);
+            attribList.push_back(getInfoAttribute(m));
+        }
+    }
+
+    float airQualityIndex = computeAverage(valid);
+    float meanIndex = airQualityIndex; // Assuming same for simplicity
+
+    return {airQualityIndex, meanIndex};
 }
 
-vector<AirCleaner>& Service::getAirCleaners() const {
-    return airCleaners;
-}
-
-vector<Sensor>& Service::getSensors() const {
-    return sensors;
-}
-
-vector<Measurement>& Service::getMeasurements() const {
+// Dummy implementations of helpers (to be implemented fully)
+std::vector<Measurement> Service::getMeasurementsNear(const std::string& lat, const std::string& lon) {
+    // TODO: filter measurements by coordinates near lat/lon
     return measurements;
 }
 
-vector<Attribut>& Service::getAttributs() const {
-    return attributs;
+std::vector<Measurement> Service::getMeasurementsByDate(const Date& date) {
+    std::vector<Measurement> result;
+    for (const auto& m : measurements) {
+        if (m.getDate().year == date.year &&
+            m.getDate().month == date.month &&
+            m.getDate().day == date.day) {
+            result.push_back(m);
+        }
+    }
+    return result;
 }
 
-// Setters
-void Service::setProviders(const std::vector<Provider>& providers) {
-    this->providers = providers;
+Sensor Service::getSensorByMeasurement(const Measurement& m) {
+    return m.getSensor();
 }
 
-void Service::setPrivateIndividuals(const std::vector<PrivateIndividual>& privateIndividuals) {
-    this->privateIndividuals = privateIndividuals;
+Attribut Service::getInfoAttribute(const Measurement& m) {
+    return m.getAttribut();
 }
 
-void Service::setAirCleaners(const std::vector<AirCleaner>& airCleaners) {
-    this->airCleaners = airCleaners;
+float Service::computeAverage(const std::vector<Measurement>& data) {
+    if (data.empty()) return 0.0f;
+    float sum = 0.0f;
+    for (const auto& m : data) {
+        sum += m.getValue();
+    }
+    return sum / data.size();
 }
 
-void Service::setSensors(const std::vector<Sensor>& sensors) {
-    this->sensors = sensors;
+float Service::calculateImprovement(float before, float after) {
+    if (before == 0) return 0.0f;
+    return ((before - after) / before) * 100.0f;
 }
 
-void Service::setMeasurements(const std::vector<Measurement>& measurements) {
-    this->measurements = measurements;
-}
-
-void Service::setAttributs(const std::vector<Attribut>& attributs) {
-    this->attributs = attributs;
-}
-
-
-// Account Management
-User Service::createAccount(int id, const string& password, const string& email) {
-    return User();
-}
-
-User Service::connect(int id, const string& password, const string& email) {
-    return User();
-}
-
-bool Service::disconnect(const User& user) {
-    return true;
-}
-
-// Data Loading
-bool Service::loadFile() {
-    return true;
-}
-
-// Cleaners & Sensors
-pair<float, float> Service::displayImpactCleaners(const AirCleaner& airCleaner) {
-    return {0.0f, 0.0f}; // Placeholder for radius and improvement
-}
-
-float Service::displayAirQuality(double latitude, double longitude, const string& date) {
+float Service::determineDistance(const Sensor& s1, const Sensor& s2) {
+    // TODO: implement proper distance computation if coordinates are numerical
     return 0.0f;
 }
 
-bool Service::analyseDataIndividual(const PrivateIndividual& individual) {
-    return true;
+std::vector<Measurement> Service::getMeasurementsBySensor(const Sensor& s) {
+    std::vector<Measurement> result;
+    for (const auto& m : measurements) {
+        if (m.getSensor().getId() == s.getId()) {
+            result.push_back(m);
+        }
+    }
+    return result;
 }
-
-vector<pair<Sensor, int>> Service::compareSensor(const Sensor& sensor, const string& start, const string& end) {
-    return {};
-}
-
-// Statistical Measures
-float Service::displayMeansAirQuality(double lat, double lon, const string& start, const string& end) {
-    return 0.0f;
-}
-
-pair<float, float> Service::displayMinMaxAirQuality(double lat, double lon, const string& start, const string& end) {
-    return {0.0f, 0.0f}; // min, max
-}
-
-vector<Measurement> Service::displayEvolutionAirQuality(double lat, double lon, const string& start, const string& end) {
-    return {};
-}
-
-// Data Contribution & Consultation
-bool Service::contributeData(const string& filePath) {
-    return true;
-}
-
-vector<Measurement> Service::consultData(const User& user) {
-    return {};
-}
-
-vector<PrivateIndividual> Service::consultExcluded() {
-    return {};
-}
-
-
