@@ -26,7 +26,7 @@
 #include <map>
 #include "Provider.h"
 #include "PrivateIndividual.h"
-//#include "AirCleaner.h"
+#include "AirCleaner.h"
 #include "Sensor.h"
 #include "Measurement.h"
 #include "Attribut.h"
