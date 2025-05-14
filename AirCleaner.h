@@ -38,8 +38,7 @@ public:
     Date getEnd() const;
 
     //Constructors and Destructor    
-    AirCleaner(int id, string lat, string lon, Date start, Date end)
-        : id(id), latitude(lat), longitude(lon), start(start), end(end) {}
-    AirCleaner(const AirCleaner& user);
-    virtual ~AirCleaner() {}
+    AirCleaner(int id, const string& lat, const string& lon, const Date& start, const Date& end);
+    AirCleaner(const AirCleanner& aircleaner);
+    ~AirCleaner();
 };

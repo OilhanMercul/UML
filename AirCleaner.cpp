@@ -8,8 +8,21 @@ using namespace std;
 
 #include "AirCleaner.h"
 
-AirCleaner::AirCleaner(int id, std::string lat, std::string lon, Date start, Date end)
-    : id(id), latitude(lat), longitude(lon), start(start), end(end) {}
+AirCleaner::AirCleaner(int id, const string& lat, const string& lon, const Date& start, const Date& end){
+    this->id = id;
+    this->latitude = lat;
+    this->longitude = lon;
+    this->start = start;
+    this->end = end;
+}
+
+AirCleaner::AirCleaner(const AirCleaner& aircleaner) {
+    this->id = aircleaner.id;
+    this->latitude = aircleaner.latitude;
+    this->longitude = aircleaner.longitude;
+    this->start = aircleaner.start;
+    this->end = aircleaner.end;
+}
 
 AirCleaner::~AirCleaner() {}
 
