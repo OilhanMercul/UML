@@ -6,11 +6,11 @@ Service::Service() {
 }
 
 // Account Management
-User Service::createAccount(const string& password, const string& email) {
+User Service::createAccount(int id, const string& password, const string& email) {
     return User();
 }
 
-User Service::connect(const string& password, const string& email) {
+User Service::connect(int id, const string& password, const string& email) {
     return User();
 }
 

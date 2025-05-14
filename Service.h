@@ -48,8 +48,8 @@ public:
     Service();
 
     // Account Management
-    User createAccount(const string& password, const string& email);
-    User connect(const string& password, const string& email);
+    User createAccount(int id, const string& password, const string& email);
+    User connect(int id, const string& password, const string& email);
     bool disconnect(const User& user);
 
     // Data Loading
