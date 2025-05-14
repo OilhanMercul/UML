@@ -9,7 +9,7 @@ using namespace std;
 #include "User.h"
 #include "AirCleaner.h"
 
-class Provider {
+class Provider : public User {
 protected: 
     list<AirCleaner> airCleaners;
     string companyName;
@@ -20,10 +20,11 @@ public:
     string getCompanyName() const;
     void setAirCleaners(const list<AirCleaner>& airCleaners);
     list<AirCleaner> getAirCleaners() const;
+    virtual void print() const; // Pure virtual function
 
     // Constructors and Destructor
-    Provider(const string& name);
-    Provider(const Provider& user);
+    Provider(int id, const string& password, const string& email, const string& name) : User(id, password, email), companyName(name) {}
+    Provider(const Provider& user) : User(user), companyName(user.companyName), airCleaners(user.airCleaners) {}
     virtual ~Provider() {}
     
 };

@@ -68,3 +68,18 @@ int PrivateIndividual::consultPoints() {
     return this->points;
 }
 
+void PrivateIndividual::print() const {
+    cout << "Private Individual ID: " << id << endl; // Assuming id is inherited from User
+    cout << "Private Individual Password: " << password << endl; // Assuming password is inherited from User
+    cout << "Private Individual Email: " << email << endl; // Assuming email is inherited from User
+    cout << "First Name: " << firstName << endl;
+    cout << "Last Name: " << lastName << endl;
+    cout << "Phone: " << phone << endl;
+    cout << "Address: " << address << endl;
+    cout << "Points: " << points << endl;
+    cout << "Reliable: " << (reliable ? "Yes" : "No") << endl;
+    cout << "Sensors: " << endl;
+    for (const auto& sensor : sensors) {
+        sensor.print(); // Assuming Sensor has a print method
+    }
+}
