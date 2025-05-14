@@ -120,6 +120,7 @@ void afficherMenuConnexion(){
         std::cout << "1. Governmental agency" << std::endl;
         std::cout << "2. Providers" << std::endl;
         std::cout << "3. Private individuals" << std::endl;
+        std::cout << "4. Test the app" << std::endl;
         std::cout << "0. Leave the app" << std::endl;
         std::cout << "Choice : ";
         std::cin >> choix;
@@ -128,10 +129,18 @@ void afficherMenuConnexion(){
             case 1: menuAgent(); break;
             case 2: menuFournisseur(); break;
             case 3: menuUtilisateur(); break;
+            case 4: test(); break;
             case 0: std::cout << "Goodbye !" << std::endl; break;
             default: std::cout << "Invalid choice. Please choose again :.\n";
         }
     } while (choix != 0);
+}
+
+void test() {
+    std::cout << "Test function called." << std::endl;
+    // Add your test code here
+    User user(1, "password", "mail");
+    user.print();
 }
 
 int main() {
