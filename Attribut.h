@@ -18,6 +18,7 @@ protected:
     string unit;
     string description;
 
+public:
     //Getters and Setters
     void setId(int id);
     void setUnit(const string& unit);
