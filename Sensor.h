@@ -25,10 +25,16 @@ public:
     string getLatitude() const;
     string getLongitude() const;
 
+    void print() const {
+        cout << "Sensor ID: " << id << endl;
+        cout << "Latitude: " << latitude << endl;
+        cout << "Longitude: " << longitude << endl;
+    }
+
     //Constructors and Destructor
     Sensor(int id, const string& latitude, const string& longitude);
     Sensor(const Sensor& sensor);
-    ~Sensor();
+    Sensor() : id(0), latitude(""), longitude("") {}
 
 
 };

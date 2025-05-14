@@ -21,16 +21,47 @@ using namespace std;
 
 //------------------------------------------------------ Include personnel
 #include "Provider.h"
+#include "AirCleaner.h"
+#include "PrivateIndividual.h"
+#include "Measurement.h"
+#include "Attribut.h"
+#include "Service.h"
+#include "Sensor.h"
 //------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
 void test() {
-    std::cout << "Test function called." << std::endl;
-    // Add your test code here
+    std::cout << "\033[1;32mTest function called.\033[0m" << std::endl;
+    std::cout << "\033[1;34m---------------------\033[0m" << std::endl;
+
+    std::cout << "\033[1;33mCreating a Provider object\033[0m" << std::endl;
     Provider provider(1, "password", "mail", "name");
+    std::cout << "\033[1;36mPrinting the provider details\033[0m" << std::endl;
     provider.print();
+
+    std::cout << "\033[1;33m---------------------\033[0m" << std::endl;
+
+    std::cout << "\033[1;33mCreating an AirCleaner object\033[0m" << std::endl;
+    AirCleaner airCleaner(1, "lat", "lon", Date(2023, 10, 1), Date(2023, 10, 31));
+    std::cout << "\033[1;36mPrinting the air cleaner details\033[0m" << std::endl;
+    airCleaner.print();
+
+    std::cout << "\033[1;33m---------------------\033[0m" << std::endl;
+
+    provider.setAirCleaners({ airCleaner });
+    std::cout << "\033[1;36mPrinting the provider details again\033[0m" << std::endl;    
+    provider.print();
+
+    std::cout << "\033[1;33m---------------------\033[0m" << std::endl;
+
+    std::cout << "\033[1;33mCreating a PrivateIndividual object\033[0m" << std::endl;
+    PrivateIndividual privateIndividual(1, "password", "mail", "firstName", "lastName", "phone", "address");
+    std::cout << "\033[1;36mPrinting the private individual details\033[0m" << std::endl;
+    privateIndividual.print();
+
+    std::cout << "\033[1;34m---------------------\033[0m" << std::endl;
 }
 
 void menuAgent(){

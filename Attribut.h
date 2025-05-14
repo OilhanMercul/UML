@@ -29,8 +29,8 @@ public:
 
     //Constructors and Destructor
     Attribut(int id, const string& unit, const string& description);
-    Attribut(const User& attribut);
-    ~Attribut();
+    Attribut() : id(0), unit(""), description("") {}
+    Attribut(const Attribut& attribut);
 
 };
 
