@@ -1,16 +1,4 @@
-/*************************************************************************
-                           User  -  description
-                             -------------------
-    début                : $DATE$
-    copyright            : (C) $YEAR$ par $AUTHOR$
-    e-mail               : $EMAIL$
-*************************************************************************/
 
-//---------- Réalisation de la classe <User> (fichier User.cpp) ------------
-
-//---------------------------------------------------------------- INCLUDE
-
-//-------------------------------------------------------- Include système
 using namespace std;
 #include <iostream>
 #include <map>
@@ -19,18 +7,40 @@ using namespace std;
 #include <algorithm>
 #include  <array>
 
-//------------------------------------------------------ Include personnel
 #include "User.h"
 
-//------------------------------------------------------------- Constantes
+User::User(int id, const string& password, const string& email){
+    this->id = id;
+    this->password = password;
+    this->email = email;
+}
 
-//----------------------------------------------------------------- PUBLIC
+User::User(const User& user) {
+    this->password = user.password;
+    this->email = user.email;
+    this->id = user.id;
+}
 
-//----------------------------------------------------- Méthodes publiques
+void User::setPassword(const string& password) {
+    this->password = password;
+}
 
+string User::getPassword() const {
+    return this->password;
+}
 
+void User::setEmail(const string& email) {
+    this->email = email;
+}
 
+string User::getEmail() const {
+    return this->email;
+}
 
-//------------------------------------------------------------------ PRIVE
+void User::setId(int id) {
+    this->id = id;
+}
 
-//----------------------------------------------------- Méthodes protégées
+int User::getId() const {
+    return this->id;
+}
