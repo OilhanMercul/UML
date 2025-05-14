@@ -4,7 +4,7 @@ using namespace std;
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include  <array>
+#include <array>
 
 #include "Provider.h"
 
