@@ -2,7 +2,7 @@
 EXEC = main
 
 # Fichiers source
-SRC = main.cpp 
+SRC = main.cpp Provider.cpp User.cpp AirCleaner.cpp
 
 # Options du compilateur
 CXX = g++

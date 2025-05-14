@@ -7,7 +7,9 @@ using namespace std;
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include  <array>
+#include <array>
+
+#include "User.h"
 
 class Attribut {
 protected:

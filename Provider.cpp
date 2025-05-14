@@ -11,6 +11,7 @@ using namespace std;
 
 
 Provider::Provider(int id, const string& password, const string& email, const string& name) : User(id, password, email), companyName(name) {
+    this->airCleaners = list<AirCleaner>(); // Initialize airCleaners to an empty list
     // Constructor implementation
 }
 

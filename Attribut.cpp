@@ -7,6 +7,7 @@ using namespace std;
 #include  <array>
 
 #include "Attribut.h"
+#include "User.h"
 
 
 //Constructeur
@@ -17,9 +18,9 @@ Attribut::Attribut(int id, const string& unit, const string& description){
 }
 
 Attribut::Attribut(const Attribut& attribut) {
-    this->unit = user.unit;
-    this->description = user.description;
-    this->id = user.id;
+    this->unit = attribut.unit;
+    this->description = attribut.description;
+    this->id = attribut.id;
 }
 
 
@@ -29,7 +30,7 @@ void Attribut::setUnit(const string& unit) {
 }
 
 string Attribut::getUnit() const {
-    return this->password;
+    return this->unit;
 }
 
 void Attribut::setDescription(const string& description) {

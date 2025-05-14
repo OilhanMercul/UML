@@ -28,7 +28,6 @@ protected:
     //Constructors and Destructor
     User(int id, const string& password, const string& email);
     User(const User& user);
-    virtual ~User();
 
 };
 

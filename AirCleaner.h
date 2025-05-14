@@ -7,7 +7,7 @@ using namespace std;
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include  <array>
+#include <array>
 
 struct Date {
     int year;
@@ -31,7 +31,7 @@ public:
     //Getters and Setters
     void setId(int id);
     void setLatitude(const string& latitude);
-    void setlongitude(const string& longitude);
+    void setLongitude(const string& longitude);
     void setStart(const Date& start);
     void setEnd(const Date& end);
     int getId() const;
@@ -39,6 +39,14 @@ public:
     string getLongitude() const;
     Date getStart() const;
     Date getEnd() const;
+    
+    void print() const {
+        cout << "AirCleaner ID: " << id << endl;
+        cout << "Latitude: " << latitude << endl;
+        cout << "Longitude: " << longitude << endl;
+        cout << "Start Date: " << start.year << "-" << start.month << "-" << start.day << endl;
+        cout << "End Date: " << end.year << "-" << end.month << "-" << end.day << endl;
+    }
 
     //Constructors and Destructor    
     AirCleaner(int id, const string& lat, const string& lon, const Date& start, const Date& end);

@@ -46,7 +46,6 @@ public:
     //Constructors and Destructor
     PrivateIndividual(int id, const string& password, const string& email, const string& firstName, const string& lastName, const string& phone, const string& address);
     PrivateIndividual(const PrivateIndividual& privateIndividual);
-    virtual ~PrivateIndividual();
 
     //Methods
     int consultPoints();
