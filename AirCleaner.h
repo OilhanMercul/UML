@@ -39,6 +39,6 @@ public:
 
     //Constructors and Destructor    
     AirCleaner(int id, const string& lat, const string& lon, const Date& start, const Date& end);
-    AirCleaner(const AirCleanner& aircleaner);
+    AirCleaner(const AirCleaner& aircleaner);
     ~AirCleaner();
 };
