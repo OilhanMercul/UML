@@ -83,3 +83,12 @@ void PrivateIndividual::print() const {
         sensor.print(); // Assuming Sensor has a print method
     }
 }
+
+void PrivateIndividual::setReliable(bool reliable) {
+    this->reliable = reliable;
+}
+
+bool PrivateIndividual::getReliable() const {
+    return this->reliable;
+}
+

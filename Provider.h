@@ -26,10 +26,8 @@ public:
     virtual void print() const; // Pure virtual function
 
     // Constructors and Destructor
-    Provider(int id, const string& password, const string& email, const string& name) : User(id, password, email), companyName(name) {}
-    Provider(const Provider& user) : User(user), companyName(user.companyName), airCleaners(user.airCleaners) {}
-    virtual ~Provider() {}
-    
+    Provider(int id, const string& password, const string& email, const string& name);
+    Provider(const Provider& user);
 };
 
 

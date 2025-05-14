@@ -20,20 +20,18 @@ using namespace std;
 #include  <array>
 
 //------------------------------------------------------ Include personnel
-#include "User.h"
-#include "AirCleaner.h"
 #include "Provider.h"
-#include "Attribut.h"
-#include "Sensor.h"
-#include "PrivateIndividual.h"
-#include "Measurement.h"
-#include "Service.h"
-
 //------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
+void test() {
+    std::cout << "Test function called." << std::endl;
+    // Add your test code here
+    Provider provider(1, "password", "mail", "name");
+    provider.print();
+}
 
 void menuAgent(){
     int choix;
@@ -136,12 +134,7 @@ void afficherMenuConnexion(){
     } while (choix != 0);
 }
 
-void test() {
-    std::cout << "Test function called." << std::endl;
-    // Add your test code here
-    User user(1, "password", "mail");
-    user.print();
-}
+
 
 int main() {
     std::cout << "Welcome to AirWatcher !\n";
