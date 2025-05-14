@@ -1,39 +1,20 @@
 # Nom de l'exécutable
-TARGET = AirWatcher
+EXEC = main
 
-# Compilateur et options
-CC = gcc
-CFLAGS = -Wall -Wextra -g
+# Fichiers source
+SRC = main.cpp 
 
-# Répertoires
-SRC_DIR = src
-OBJ_DIR = obj
-BIN_DIR = bin
+# Options du compilateur
+CXX = g++
+CXXFLAGS = -Wall -Wextra -std=c++17
 
-# Fichiers sources et objets
-SRCS = $(wildcard $(SRC_DIR)/*.c)
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+# Cibles
+all: $(EXEC)
 
-# Règle par défaut
-all: $(BIN_DIR)/$(TARGET)
+$(EXEC): $(SRC)
+	$(CXX) $(CXXFLAGS) -o $(EXEC) $(SRC)
 
-# Création de l'exécutable
-$(BIN_DIR)/$(TARGET): $(OBJS)
-	@mkdir -p $(BIN_DIR)
-	$(CC) $(CFLAGS) -o $@ $^
-
-# Compilation des fichiers objets
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Nettoyage
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
+	rm -f $(EXEC)
 
-# Nettoyage complet
-distclean: clean
-	rm -f *~ $(SRC_DIR)/*~ $(SRC_DIR)/*.bak
-
-# Règles phony
-.PHONY: all clean distclean
+.PHONY: all clean
