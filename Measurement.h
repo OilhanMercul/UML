@@ -14,13 +14,14 @@ using namespace std;
 
 class Measurement {
 protected:
-    //Atributes
+    // Attributes
     int id;
     Date date;
     Sensor sensor;
     Attribut attribut;
     float value;
 
+public:
     // Getters
     int getId() const;
     Date getDate() const;
@@ -35,12 +36,10 @@ protected:
     void setAttribut(const Attribut& newAttribut);
     void setValue(float newValue);
 
-
-    //Constructors and Destructor
+    // Constructors and Destructor
     Measurement(int id, const Date& date, const Sensor& sensor, const Attribut& attribut, float value);
     Measurement(const Measurement& measurement);
     ~Measurement();
-
 };
 
 #endif
