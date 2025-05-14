@@ -62,6 +62,22 @@ void test() {
     privateIndividual.print();
 
     std::cout << "\033[1;34m---------------------\033[0m" << std::endl;
+
+    std::cout << "\033[1;33mCreating a Sensor object\033[0m" << std::endl;
+    Sensor sensor(1, "lat", "lon");
+    std::cout << "\033[1;36mPrinting the sensor details\033[0m" << std::endl;
+    sensor.print();
+    std::cout << "\033[1;34m---------------------\033[0m" << std::endl;
+
+    std::cout << "\033[1;33mCreating a Measurement object\033[0m" << std::endl;
+    Measurement measurement(1, Date(2023, 10, 1), sensor, Attribut(1, "unit", "description"), 42.0);
+    std::cout << "\033[1;36mPrinting the measurement details\033[0m" << std::endl;
+    std::cout << "Measurement ID: " << measurement.getId() << std::endl;
+    std::cout << "Measurement Date: " << measurement.getDate().year << "-" << measurement.getDate().month << "-" << measurement.getDate().day << std::endl;
+    std::cout << "Measurement Sensor: " << measurement.getSensor().getId() << std::endl;
+    std::cout << "Measurement Attribut: " << measurement.getAttribut().getId() << std::endl;
+    std::cout << "Measurement Value: " << measurement.getValue() << std::endl;
+    std::cout << "\033[1;34m---------------------\033[0m" << std::endl;
 }
 
 void menuAgent(){
