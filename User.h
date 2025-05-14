@@ -20,10 +20,11 @@ protected:
     int getId() const;
     string getPassword() const;
     string getEmail() const;
+    virtual void print() const = 0; // Pure virtual function
 
     //Constructors and Destructor
     User(int id, const string& password, const string& email);
     User(const User& user);
-    ~User();
+    virtual ~User();
 
 };

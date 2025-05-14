@@ -35,11 +35,15 @@ public:
     void setSensors(const list<Sensor>& sensors);
     void setPoints(int points);
     int getPoints() const;
+    bool getReliable() const;
+    void setReliable(bool reliable);
+
+    void print() const; // Pure virtual function
 
     //Constructors and Destructor
     PrivateIndividual(int id, const string& password, const string& email, const string& firstName, const string& lastName, const string& phone, const string& address);
     PrivateIndividual(const PrivateIndividual& privateIndividual);
-    ~PrivateIndividual();
+    virtual ~PrivateIndividual();
 
     //Methods
     int consultPoints();
