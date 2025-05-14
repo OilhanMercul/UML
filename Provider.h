@@ -1,3 +1,6 @@
+#ifndef PROVIDER_H
+#define PROVIDER_H
+
 using namespace std;
 #include <iostream>
 #include <map>
@@ -28,3 +31,6 @@ public:
     virtual ~Provider() {}
     
 };
+
+
+#endif

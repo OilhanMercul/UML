@@ -1,3 +1,6 @@
+#ifndef PRIVATEINDIVIDUAL_H
+#define PRIVATEINDIVIDUAL_H
+
 using namespace std;
 #include <iostream>
 #include <map>
@@ -48,3 +51,6 @@ public:
     //Methods
     int consultPoints();
 };
+
+
+#endif

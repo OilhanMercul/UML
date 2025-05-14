@@ -1,3 +1,6 @@
+#ifndef USER_H
+#define USER_H
+
 using namespace std;
 #include <iostream>
 #include <map>
@@ -28,3 +31,5 @@ protected:
     virtual ~User();
 
 };
+
+#endif
