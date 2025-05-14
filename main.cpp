@@ -20,6 +20,14 @@ using namespace std;
 #include  <array>
 
 //------------------------------------------------------ Include personnel
+#include "User.h"
+#include "AirCleaner.h"
+#include "Provider.h"
+#include "Attribut.h"
+#include "Sensor.h"
+#include "PrivateIndividual.h"
+#include "Measurement.h"
+#include "Service.h"
 
 //------------------------------------------------------------- Constantes
 
@@ -34,6 +42,7 @@ void afficherMenuConnexion(){
         std::cout << "1. Governmental agency" << std::endl;
         std::cout << "2. Providers" << std::endl;
         std::cout << "3. Private individuals" << std::endl;
+        std::cout << "4. Test" << std::endl;
         std::cout << "0. Leave the app" << std::endl;
         std::cout << "Choice : ";
         std::cin >> choix;
@@ -42,6 +51,7 @@ void afficherMenuConnexion(){
             case 1: menuAgent(); break;
             case 2: menuFournisseur(); break;
             case 3: menuUtilisateur(); break;
+            case 4: test(); break;
             case 0: std::cout << "Goodbye !" << std::endl; break;
             default: std::cout << "Invalid choice. Please choose again :.\n";
         }
@@ -124,6 +134,11 @@ void menuUtilisateur(){
             default: std::cout << "Invalid choice. Please choose again :.\n";
         }
     } while (choix != 0);
+}
+
+void test(){
+    
+
 }
 
 int main() {
