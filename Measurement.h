@@ -8,7 +8,7 @@ using namespace std;
 #include <string>
 #include <algorithm>
 #include  <array>
-#include "aircleaner.h" // pour la struct Date
+#include "AirCleaner.h" // pour la struct Date
 #include "Sensor.h"
 #include "Attribut.h"
 
