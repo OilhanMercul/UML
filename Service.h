@@ -70,6 +70,23 @@ public:
     bool contributeData(const string& filePath);
     vector<Measurement> consultData(const User& user);
     vector<PrivateIndividual> consultExcluded();
+
+protected:
+// Getters
+    vector<Provider>& getProviders() const;
+    vector<PrivateIndividual>& getPrivateIndividuals() const;
+    vector<AirCleaner>& getAirCleaners() const;
+    vector<Sensor>& getSensors() const;
+    vector<Measurement>& getMeasurements() const;
+    vector<Attribut>& getAttributs() const;
+
+    // Setters
+    void setProviders(const std::vector<Provider>& providers);
+    void setPrivateIndividuals(const std::vector<PrivateIndividual>& privateIndividuals);
+    void setAirCleaners(const std::vector<AirCleaner>& airCleaners);
+    void setSensors(const std::vector<Sensor>& sensors);
+    void setMeasurements(const std::vector<Measurement>& measurements);
+    void setAttributs(const std::vector<Attribut>& attributs);
 };
 
 #endif // SERVICE_H

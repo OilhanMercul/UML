@@ -1,9 +1,62 @@
 #include "Service.h"
 using namespace std;
+
+
 // Constructor
 Service::Service() {
-    // Optional initialization
 }
+
+
+// Getters
+vector<Provider>& Service::getProviders() const {
+    return providers;
+}
+
+vector<PrivateIndividual>& Service::getPrivateIndividuals() const {
+    return privateIndividuals;
+}
+
+vector<AirCleaner>& Service::getAirCleaners() const {
+    return airCleaners;
+}
+
+vector<Sensor>& Service::getSensors() const {
+    return sensors;
+}
+
+vector<Measurement>& Service::getMeasurements() const {
+    return measurements;
+}
+
+vector<Attribut>& Service::getAttributs() const {
+    return attributs;
+}
+
+// Setters
+void Service::setProviders(const std::vector<Provider>& providers) {
+    this->providers = providers;
+}
+
+void Service::setPrivateIndividuals(const std::vector<PrivateIndividual>& privateIndividuals) {
+    this->privateIndividuals = privateIndividuals;
+}
+
+void Service::setAirCleaners(const std::vector<AirCleaner>& airCleaners) {
+    this->airCleaners = airCleaners;
+}
+
+void Service::setSensors(const std::vector<Sensor>& sensors) {
+    this->sensors = sensors;
+}
+
+void Service::setMeasurements(const std::vector<Measurement>& measurements) {
+    this->measurements = measurements;
+}
+
+void Service::setAttributs(const std::vector<Attribut>& attributs) {
+    this->attributs = attributs;
+}
+
 
 // Account Management
 User Service::createAccount(int id, const string& password, const string& email) {
@@ -65,3 +118,5 @@ vector<Measurement> Service::consultData(const User& user) {
 vector<PrivateIndividual> Service::consultExcluded() {
     return {};
 }
+
+
