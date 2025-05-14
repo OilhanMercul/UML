@@ -1,3 +1,6 @@
+#ifndef SENSOR_H
+#define SENSOR_H
+
 using namespace std;
 #include <iostream>
 #include <map>
@@ -29,3 +32,6 @@ public:
 
 
 };
+
+
+#endif

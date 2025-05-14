@@ -1,3 +1,6 @@
+#ifndef AIRCLEANER_H
+#define AIRCLEANER_H
+
 using namespace std;
 #include <iostream>
 #include <map>
@@ -42,3 +45,6 @@ public:
     AirCleaner(const AirCleaner& aircleaner);
     ~AirCleaner();
 };
+
+
+#endif

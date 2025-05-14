@@ -1,3 +1,6 @@
+#ifndef ATTRIBUT_H
+#define ATTRIBUT_H
+
 using namespace std;
 #include <iostream>
 #include <map>
@@ -27,3 +30,5 @@ protected:
     ~Attribut();
 
 };
+
+#endif

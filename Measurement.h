@@ -1,3 +1,6 @@
+#ifndef MEASUREMENT_H
+#define MEASUREMENT_H
+
 using namespace std;
 #include <iostream>
 #include <map>
@@ -39,3 +42,5 @@ protected:
     ~Measurement();
 
 };
+
+#endif
