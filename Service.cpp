@@ -1,5 +1,6 @@
 #include "Service.h"
 #include <cmath>
+#include <corecrt_math_defines.h>
 using namespace std;
 
 
@@ -85,8 +86,29 @@ pair<float, float> Service::getAirQuality(const string& lat, const string& lon, 
 
 // À implémenter : Récupérer les mesures proches d’un point (ex. dans un rayon de 1km)
 vector<Measurement> Service::getMeasurementsNear(const string& lat, const string& lon) {
-    // TODO: filtrer avec une vraie distance
-    return measurements;
+    vector<Measurement> result;
+    float centerLat = stof(lat);
+    float centerLon = stof(lon);
+
+    for (const auto& m : measurements) {
+        Sensor s = m.getSensor();
+        float sensorLat = stof(s.getLatitude());
+        float sensorLon = stof(s.getLongitude());
+
+        float dLat = (sensorLat - centerLat) * M_PI / 180.0f;
+        float dLon = (sensorLon - centerLon) * M_PI / 180.0f;
+
+        float a = sin(dLat / 2) * sin(dLat / 2) +
+                  cos(centerLat * M_PI / 180.0f) * cos(sensorLat * M_PI / 180.0f) *
+                  sin(dLon / 2) * sin(dLon / 2);
+        float c = 2 * atan2(sqrt(a), sqrt(1 - a));
+        float distance = 6371.0f * c; // Earth radius in km
+
+        if (distance <= 1.0f) {
+            result.push_back(m);
+        }
+    }
+    return result;
 }
 
 //Obtenir les mesures à une date précise
@@ -130,8 +152,20 @@ float Service::calculateImprovement(float before, float after) {
 
 //À implémenter correctement : Calculer la distance entre 2 capteurs
 float Service::determineDistance(const Sensor& s1, const Sensor& s2) {
-    // TODO: remplacer par calcul de distance réel
-    return 0.0f;
+    const float R = 6371.0f; // Radius of Earth in kilometers
+    float lat1 = stof(s1.getLatitude()) * M_PI / 180.0f;
+    float lon1 = stof(s1.getLongitude()) * M_PI / 180.0f;
+    float lat2 = stof(s2.getLatitude()) * M_PI / 180.0f;
+    float lon2 = stof(s2.getLongitude()) * M_PI / 180.0f;
+
+    float dlat = lat2 - lat1;
+    float dlon = lon2 - lon1;
+
+    float a = sin(dlat / 2) * sin(dlat / 2) +
+              cos(lat1) * cos(lat2) *
+              sin(dlon / 2) * sin(dlon / 2);
+    float c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    return R * c;
 }
 
 //Retourner les mesures d'un capteur
