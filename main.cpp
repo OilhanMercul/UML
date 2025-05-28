@@ -85,35 +85,37 @@ void test() {
 void ConsultQualityOfAir() {
     cout << "Consulting the quality of the air..." << endl;
     Service service;
+    string latitude, longitude;
+    Date date;
+    cout << "Enter latitude: ";
+    cin >> latitude;
+    cout << "Enter longitude: ";
+    cin >> longitude;
+    cout << "Enter date (YYYY MM DD): ";
+    cin >> date.year >> date.month >> date.day;
+    pair<float, float> quality = service.getAirQuality(latitude, longitude, date);
+    cout << "Air quality at (" << latitude << ", " << longitude << ") on " 
+         << date.year << "-" << date.month << "-" << date.day 
+         << " is: " << quality.first << " (before), " 
+         << quality.second << " (after)." << endl;
+}
 
-    cout << "List of Sensors:" << endl;
-    for (const auto& sensor : service.getSensors()) {
-        sensor.print();
+void ConsultImpactAirCleanner(){
+    cout << "Consulting the impact of air cleaners..." << endl;
+    Service service;
+    vector<AirCleaner> cleaners = service.getAirCleaners();
+    if (cleaners.empty()) {
+        cout << "No air cleaners available." << endl;
+        return;
     }
-
-    cout << "\nList of Providers:" << endl;
-    for (const auto& provider : service.getProviders()) {
-        provider.print();
+    for (const auto& cleaner : cleaners) {
+        cleaner.print();
+        pair<float, float> impact = service.displayImpactCleaners(cleaner);
+        cout << "Impact of cleaner ID " << cleaner.getId() 
+             << ": Before: " << impact.first 
+             << ", After: " << impact.second << endl;
     }
-
-    cout << "\nList of Private Individuals:" << endl;
-    for (const auto& individual : service.getPrivateIndividuals()) {
-        individual.print();
-    }
-
-    cout << "\nList of Air Cleaners:" << endl;
-    for (const auto& airCleaner : service.getAirCleaners()) {
-        airCleaner.print();
-    }
-
-    cout << "\nList of Measurements:" << endl;
-    cout << "Number of measurements: " << service.getMeasurements().size() << endl;
-
-    cout << "\nList of Attributes:" << endl;
-    for (const auto& attribut : service.getAttributs()) {
-        attribut.print();
-    }
-
+    cout << "Impact consultation completed." << endl;
 }
 
 void menuAgent(){
@@ -131,15 +133,22 @@ void menuAgent(){
         cin >> choix;
 
         switch (choix) {
-            case 1: ConsultQualityOfAir();// On doit faire ca
+            case 1: ConsultQualityOfAir();
             break;
+
             case 2: break;
+
             case 3: break;
-            case 4: // On fait
+
+            case 4: ConsultImpactAirCleanner();
             break;
+
             case 5: break;
+
             case 6: break;
+            
             case 0: return;
+
             default: cout << "Invalid choice. Please choose again :.\n";
         }
     } while (choix != 0);
