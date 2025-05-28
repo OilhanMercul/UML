@@ -213,9 +213,9 @@ pair<float, float> Service::displayImpactCleaners(const AirCleaner& airCleaner) 
         }
     }
 
-    float avgBefore = computeAverage(beforeData);
-    float avgDuring = computeAverage(duringData);
-    float avgAfter = computeAverage(afterData);
+    float avgBefore = computeAtmoIndex(beforeData);
+    float avgDuring = computeAtmoIndex(duringData);
+    float avgAfter = computeAtmoIndex(afterData);
     float improvement = calculateImprovement(avgBefore, avgAfter);
 
     float radius = 0.0f;
@@ -233,7 +233,8 @@ pair<float, float> Service::displayImpactCleaners(const AirCleaner& airCleaner) 
     return {radius, improvement};
 }
 
-pair<float, float> Service::getAirQuality(const string& lat, const string& lon, const Date& date) {
+
+float Service::getAirQuality(const string& lat, const string& lon, const Date& date) {
     vector<Measurement> all = getMeasurementsByDate(date);
     vector<Measurement> valid;
     for (const auto& m : all) {
@@ -242,14 +243,13 @@ pair<float, float> Service::getAirQuality(const string& lat, const string& lon, 
             valid.push_back(m);
         }
     }
-    float airQualityIndex = computeAverage(valid);
-    float meanIndex = airQualityIndex;
-    return {airQualityIndex, meanIndex};
+    float IndexAtmo = computeAtmoIndex(valid);
+    return {IndexAtmo};
 }
 
 
 // À implémenter : Récupérer les mesures proches d’un point (ex. dans un rayon de 1km)
-// Ca à l'aire correct
+// Ca à l'air correct
 vector<Measurement> Service::getMeasurementsNear(const string& lat, const string& lon) {
     vector<Measurement> result;
     float centerLat = stof(lat);
@@ -299,15 +299,89 @@ Attribut Service::getInfoAttribute(const Measurement& m) {
 }
 
 //Calculer la moyenne des valeurs de pollution
-// PAS BON il faut pas sommer les differents attributs ensemble il faut sommer les même attributs
-float Service::computeAverage(const vector<Measurement>& data) {
-    if (data.empty()) return 0.0f;
-    float sum = 0.0f;
+float Service::computeAtmoIndex(const vector<Measurement>& data) {
+    if (data.empty()) return 0;
+
+    // Moyennes par attribut
+    map<string, float> sumByAttr;
+    map<string, int> countByAttr;
+
     for (const auto& m : data) {
-        sum += m.getValue();
+        string attrId = m.getAttribut().getId();
+        sumByAttr[attrId] += m.getValue();
+        countByAttr[attrId]++;
     }
-    return sum / data.size();
+
+    // Calcule les indices ATMO par attribut et fait la moyenne
+    int totalIndex = 0;
+    int attributeCount = 0;
+
+    for (const auto& [attr, sum] : sumByAttr) {
+        float avg = sum / countByAttr[attr];
+        int index = getAtmoIndex(attr, avg);
+        if (index > 0) { // ignore les attributs inconnus
+            totalIndex += index;
+            attributeCount++;
+        }
+    }
+
+    if (attributeCount == 0) return 0;
+    return totalIndex / attributeCount; // moyenne des indices
+
 }
+
+int Service::getAtmoIndex(const string& attributeId, float value) {
+    if (attributeId == "O3") {
+        if (value <= 29) return 1;
+        else if (value <= 54) return 2;
+        else if (value <= 79) return 3;
+        else if (value <= 104) return 4;
+        else if (value <= 129) return 5;
+        else if (value <= 149) return 6;
+        else if (value <= 179) return 7;
+        else if (value <= 209) return 8;
+        else if (value <= 239) return 9;
+        else return 10;
+    } else if (attributeId == "NO2") {
+        if (value <= 29) return 1;
+        else if (value <= 54) return 2;
+        else if (value <= 84) return 3;
+        else if (value <= 109) return 4;
+        else if (value <= 134) return 5;
+        else if (value <= 159) return 6;
+        else if (value <= 199) return 7;
+        else if (value <= 274) return 8;
+        else if (value <= 399) return 9;
+        else return 10;
+    } else if (attributeId == "SO2") {
+        if (value <= 39) return 1;
+        else if (value <= 79) return 2;
+        else if (value <= 119) return 3;
+        else if (value <= 159) return 4;
+        else if (value <= 199) return 5;
+        else if (value <= 249) return 6;
+        else if (value <= 299) return 7;
+        else if (value <= 399) return 8;
+        else if (value <= 499) return 9;
+        else return 10;
+    } else if (attributeId == "PM10") {
+        if (value <= 6) return 1;
+        else if (value <= 13) return 2;
+        else if (value <= 20) return 3;
+        else if (value <= 27) return 4;
+        else if (value <= 34) return 5;
+        else if (value <= 41) return 6;
+        else if (value <= 49) return 7;
+        else if (value <= 64) return 8;
+        else if (value <= 79) return 9;
+        else return 10;
+    }
+
+    // Pour tout autre attribut, on retourne 0 ou un indice spécial
+    return 0;
+}
+
+
 
 float Service::calculateImprovement(float before, float after) {
     if (before == 0) return 0.0f;

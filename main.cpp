@@ -95,11 +95,11 @@ void ConsultQualityOfAir() {
     cin >> longitude;
     cout << "Enter date (YYYY MM DD): ";
     cin >> date.year >> date.month >> date.day;
-    pair<float, float> quality = service.getAirQuality(latitude, longitude, date);
+    float quality = service.getAirQuality(latitude, longitude, date);
     cout << "Air quality at (" << latitude << ", " << longitude << ") on " 
          << date.year << "-" << date.month << "-" << date.day 
-         << " is: " << quality.first << " (before), " 
-         << quality.second << " (after)." << endl;
+         << " is: " << quality << " (before), " 
+         << quality << " (after)." << endl;
 }
 
 void ConsultImpactAirCleanner(){

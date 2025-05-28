@@ -24,7 +24,7 @@ public:
 
     // Primary methods
     pair<float, float> displayImpactCleaners(const AirCleaner& airCleaner);
-    pair<float, float> getAirQuality(const string& lat, const string& lon, const Date& date);
+    float getAirQuality(const string& lat, const string& lon, const Date& date);
 
     const vector<AirCleaner>& getAirCleaners() const { return airCleaners; }
     const vector<Sensor>& getSensors() const { return sensors; }
@@ -32,6 +32,9 @@ public:
     const vector<Attribut>& getAttributs() const { return attributs; }
     const vector<PrivateIndividual>& getPrivateIndividuals() const { return privateIndividuals; }
     const vector<Provider>& getProviders() const { return providers; }
+
+    float computeAtmoIndex(const vector<Measurement>& data);
+    int getAtmoIndex(const string& attributeId, float value);
 
 private:
     vector<AirCleaner> airCleaners;
