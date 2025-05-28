@@ -374,7 +374,6 @@ Attribut Service::getInfoAttribute(const Measurement& m) {
 }
 
 //Calculer la moyenne des valeurs de pollution
-// PAS BON il faut pas sommer les differents attributs ensemble il faut sommer les même attributs
 float Service::computeAverage(const vector<Measurement>& data) {
     if (data.empty()) return 0.0f;
 
