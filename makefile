@@ -3,7 +3,7 @@ EXEC = main
 TEST_EXEC = test
 
 # Fichiers source communs
-SRC_COMMON = Provider.cpp User.cpp AirCleaner.cpp PrivateIndividual.cpp Attribut.cpp Measurement.cpp Sensor.cpp
+SRC_COMMON = Provider.cpp User.cpp AirCleaner.cpp PrivateIndividual.cpp Attribut.cpp Measurement.cpp Sensor.cpp Service.cpp
 
 # Fichiers source pour l'exécutable principal
 SRC = main.cpp $(SRC_COMMON)

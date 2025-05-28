@@ -25,7 +25,6 @@ Service::Service() {
             return;
         }
         string line;
-        getline(file, line); // skip header
         while (getline(file, line)) {
             stringstream ss(line);
             string id, lat, lon;
@@ -55,7 +54,6 @@ Service::Service() {
             return;
         }
         string line;
-        getline(file, line); // skip header
         while (getline(file, line)) {
             stringstream ss(line);
             string timestamp, sensorId, attributeId, valueStr;
@@ -104,10 +102,6 @@ Service::Service() {
             stringstream ss(line);
             string attributeId, unit, description;
             getline(ss, attributeId, ';');
-            size_t pos = attributeId.find_first_of("0123456789");
-            if (pos != string::npos) {
-                attributeId = attributeId.substr(pos);
-            }
             getline(ss, unit, ';');
             getline(ss, description, ';');
             Attribut attribut;
@@ -135,7 +129,6 @@ Service::Service() {
             return;
         }
         string line;
-        getline(file, line); // skip header
         while (getline(file, line)) {
             stringstream ss(line);
             string cleanerId, lat, lon, start, stop;
@@ -168,7 +161,6 @@ Service::Service() {
             return;
         }
         string line;
-        getline(file, line); // skip header
         while (getline(file, line)) {
             stringstream ss(line);
             string providerId, cleanerId;
@@ -202,7 +194,6 @@ Service::Service() {
             return;
         }
         string line;
-        getline(file, line); // skip header
         while (getline(file, line)) {
             stringstream ss(line);
             string userId, sensorId;
