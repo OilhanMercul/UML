@@ -2,14 +2,15 @@
 
 
 
-Provider::Provider(int id, const string& password, const string& email, const string& name) : User(id, password, email), companyName(name) {
+Provider::Provider(int id, const string& password, const string& email, const string& name)
+    : User(id, password, email), companyName(name), airCleaners() {
     this->airCleaners = list<AirCleaner>(); // Initialize airCleaners to an empty list
-    // Constructor implementation
 }
 
-Provider::Provider(const Provider& user) : User(user), companyName(user.companyName), airCleaners(user.airCleaners) {
-    // Copy constructor implementation
+Provider::Provider(const Provider& user)
+    : User(user), companyName(user.companyName), airCleaners(user.airCleaners) {
 }
+
 
 void Provider::setCompanyName(const string& name) {
     companyName = name;

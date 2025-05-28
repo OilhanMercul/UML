@@ -14,8 +14,8 @@ using namespace std;
 
 class Provider : public User {
 protected: 
-    list<AirCleaner> airCleaners;
     string companyName;
+    list<AirCleaner> airCleaners;
 
 public:
     // Getters and Setters
@@ -28,7 +28,7 @@ public:
 
     // Constructors and Destructor
     Provider(int id, const string& password, const string& email, const string& name);
-    Provider() : User(), companyName("") {};
+    Provider() : User(), companyName(""), airCleaners() {};
     Provider(const Provider& user);
 };
 
