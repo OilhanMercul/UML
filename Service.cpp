@@ -258,8 +258,9 @@ float Service::getAirQuality(const string& lat, const string& lon, const Date& d
     map<string, vector<float>> pollutantValues;
     for (const Measurement& m : closestMeasurements) {
         Attribut attr = getInfoAttribute(m);
-        string type = attr.getType();
-        float value = attr.getValue();
+        string type = attr.getDescription();
+        float value = m.getValue();
+
 
         // On ne garde que les attributs pertinents pour l’indice ATMO
         if (type == "O3" || type == "NO2" || type == "SO2" || type == "PM10") {
