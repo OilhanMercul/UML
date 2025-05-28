@@ -377,12 +377,24 @@ Attribut Service::getInfoAttribute(const Measurement& m) {
 // PAS BON il faut pas sommer les differents attributs ensemble il faut sommer les même attributs
 float Service::computeAverage(const vector<Measurement>& data) {
     if (data.empty()) return 0.0f;
-    float sum = 0.0f;
+
+    unordered_map<string, pair<float, int>> attrSums; // key: attribute ID, value: {sum, count}
+
     for (const auto& m : data) {
-        sum += m.getValue();
+        string attrId = m.getAttribut().getId();
+        attrSums[attrId].first += m.getValue();
+        attrSums[attrId].second += 1;
     }
-    return sum / data.size();
+
+    float totalAverage = 0.0f;
+    for (const auto& [_, sumCount] : attrSums) {
+        float avg = sumCount.first / sumCount.second;
+        totalAverage += avg;
+    }
+
+    return totalAverage / attrSums.size(); // mean of means
 }
+
 
 float Service::calculateImprovement(float before, float after) {
     if (before == 0) return 0.0f;
