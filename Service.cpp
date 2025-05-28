@@ -29,7 +29,6 @@ Service::Service() {
             sensor.setLongitude(lon);
             sensors.push_back(sensor);
         }
-        cout << "Chargement des capteurs terminé. Nombre de capteurs : " << sensors.size() << endl;
     }
 
     // Chargement des mesures (measurements.csv)
@@ -72,7 +71,6 @@ Service::Service() {
                 measurements.push_back(measurement);
             }
         }
-        cout << "Chargement des mesures terminé. Nombre de mesures : " << measurements.size() << endl;
     }
 
     // Chargement des attributs (attributes.csv)
@@ -96,7 +94,6 @@ Service::Service() {
             attribut.setDescription(description);
             attributs.push_back(attribut);
         }
-        cout << "Chargement des attributs terminé. Nombre d'attributs : " << attributs.size() << endl;
     }
 
     // Mise à jour des attributs dans les mesures
@@ -136,7 +133,6 @@ Service::Service() {
             );
             airCleaners.push_back(cleaner);
         }
-        cout << "Chargement des purificateurs d'air terminé. Nombre de purificateurs : " << airCleaners.size() << endl;
     }
 
     // Chargement des providers (providers.csv)
@@ -169,7 +165,6 @@ Service::Service() {
             }
             providers.push_back(provider);
         }
-        cout << "Chargement des fournisseurs d'air terminé. Nombre de fournisseurs : " << providers.size() << endl;
     }
 
     // Chargement des utilisateurs privés (users.csv)
@@ -203,7 +198,6 @@ Service::Service() {
             privateIndividuals.push_back(user);
         }
     }
-    cout << "Chargement des utilisateurs privés terminé. Nombre d'utilisateurs : " << privateIndividuals.size() << endl;
 }
 
 //Analyser l'impact d’un cleaner

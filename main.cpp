@@ -32,6 +32,9 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
+
+Service service;
+
 void test() {
     cout << "\033[48;5;236m"; // Change le background en gris foncé (code 236)
     cout << "\033[1;32mTest function called.\033[0m" << endl;
@@ -84,7 +87,6 @@ void test() {
 
 void ConsultQualityOfAir() {
     cout << "Consulting the quality of the air..." << endl;
-    Service service;
     string latitude, longitude;
     Date date;
     cout << "Enter latitude: ";
@@ -102,7 +104,6 @@ void ConsultQualityOfAir() {
 
 void ConsultImpactAirCleanner(){
     cout << "Consulting the impact of air cleaners..." << endl;
-    Service service;
     vector<AirCleaner> cleaners = service.getAirCleaners();
     if (cleaners.empty()) {
         cout << "No air cleaners available." << endl;
@@ -245,6 +246,7 @@ void afficherMenuConnexion(){
 
 
 int main() {
+    
     cout << "Welcome to AirWatcher !\n";
     afficherMenuConnexion();
     return 0;
