@@ -136,17 +136,21 @@ void menuAgent(){
             case 1: ConsultQualityOfAir();
             break;
 
-            case 2: break;
+            case 2: cout << "Comparing sensors is not implemented yet.\n";
+            break;
 
-            case 3: break;
+            case 3: cout << "Statistics are not implemented yet.\n";
+            break;
 
             case 4: ConsultImpactAirCleanner();
             break;
 
-            case 5: break;
+            case 5: cout << "Analyzing private individual data is not implemented yet.\n";
+            break;
 
-            case 6: break;
-            
+            case 6: cout << "Consulting the list of excluded users is not implemented yet.\n";
+            break;
+
             case 0: return;
 
             default: cout << "Invalid choice. Please choose again :.\n";
@@ -167,10 +171,14 @@ void menuFournisseur(){
         cin >> choix;
 
         switch (choix) {
-            case 1: break;
-            case 2: break;
-            case 3: break;
-            case 4: break;
+            case 1: ConsultQualityOfAir();
+            break;
+            case 2: cout << "Comparing sensors is not implemented yet.\n";
+            break;
+            case 3: cout << "Statistics are not implemented yet.\n";
+            break;
+            case 4: ConsultImpactAirCleanner();
+            break;
             case 0: return;
             default: cout << "Invalid choice. Please choose again :.\n";
         }
@@ -193,12 +201,18 @@ void menuUtilisateur(){
         cin >> choix;
 
         switch (choix) {
-            case 1: break;
-            case 2: break;
-            case 3: break;
-            case 4: break;
-            case 5: break;
-            case 6: break;
+            case 1: ConsultQualityOfAir();
+            break;
+            case 2: cout << "Comparing sensors is not implemented yet.\n";
+            break;
+            case 3: cout << "Statistics are not implemented yet.\n";
+            break;
+            case 4: cout << "Contributing data is not implemented yet.\n";
+            break;
+            case 5: cout << "Consulting points is not implemented yet.\n";
+            break;
+            case 6: cout << "Consulting my own sensors data is not implemented yet.\n";
+            break;
             case 0: return;
             default: cout << "Invalid choice. Please choose again :.\n";
         }
