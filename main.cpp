@@ -71,7 +71,7 @@ void test() {
     cout << "\033[1;34m---------------------\033[0m" << endl;
 
     cout << "\033[1;33mCreating a Measurement object\033[0m" << endl;
-    Measurement measurement(1, Date(2023, 10, 1), sensor, Attribut(1, "unit", "description"), 42.0);
+    Measurement measurement(1, Date(2023, 10, 1), sensor, Attribut("O3", "unit", "description"), 42.0);
     cout << "\033[1;36mPrinting the measurement details\033[0m" << endl;
     cout << "Measurement ID: " << measurement.getId() << endl;
     cout << "Measurement Date: " << measurement.getDate().year << "-" << measurement.getDate().month << "-" << measurement.getDate().day << endl;
@@ -107,10 +107,7 @@ void ConsultQualityOfAir() {
     }
 
     cout << "\nList of Measurements:" << endl;
-    for (const auto& measurement : service.getMeasurements()) {
-        cout << "Measurement ID: " << measurement.getId() << endl;
-        // Add more details if needed
-    }
+    cout << "Number of measurements: " << service.getMeasurements().size() << endl;
 
     cout << "\nList of Attributes:" << endl;
     for (const auto& attribut : service.getAttributs()) {

@@ -19,7 +19,11 @@ using namespace std;
 Service::Service() {
     // Chargement des capteurs (sensor.csv)
     {
-        ifstream file("sensor.csv");
+        ifstream file("fichiers_csv/sensors.csv");
+        if (!file.is_open()) {
+            cerr << "Erreur lors de l'ouverture du fichier sensors.csv" << endl;
+            return;
+        }
         string line;
         getline(file, line); // skip header
         while (getline(file, line)) {
@@ -28,17 +32,28 @@ Service::Service() {
             getline(ss, id, ';');
             getline(ss, lat, ';');
             getline(ss, lon, ';');
+            // Extraire la partie numérique de l'ID (ex: "Sensor0" -> 0)
+            int numericId = 0;
+            size_t pos = id.find_first_of("0123456789");
+            if (pos != string::npos) {
+            numericId = stoi(id.substr(pos));
+            }
             Sensor sensor;
-            sensor.setId(stoi(id));
+            sensor.setId(numericId);
             sensor.setLatitude(lat);
             sensor.setLongitude(lon);
             sensors.push_back(sensor);
         }
+        cout << "Chargement des capteurs terminé. Nombre de capteurs : " << sensors.size() << endl;
     }
 
     // Chargement des mesures (measurements.csv)
     {
-        ifstream file("measurements.csv");
+        ifstream file("fichiers_csv/measurements.csv");
+        if (!file.is_open()) {
+            cerr << "Erreur lors de l'ouverture du fichier measurements.csv" << endl;
+            return;
+        }
         string line;
         getline(file, line); // skip header
         while (getline(file, line)) {
@@ -46,6 +61,14 @@ Service::Service() {
             string timestamp, sensorId, attributeId, valueStr;
             getline(ss, timestamp, ';');
             getline(ss, sensorId, ';');
+            // Extraire la partie numérique de l'ID (ex: "Sensor0" -> 0)
+            int numericSensorId = 0;
+            size_t pos = sensorId.find_first_of("0123456789");
+            if (pos != string::npos) {
+                numericSensorId = stoi(sensorId.substr(pos));
+            }
+            sensorId = to_string(numericSensorId);
+
             getline(ss, attributeId, ';');
             getline(ss, valueStr, ';');
             float value = stof(valueStr);
@@ -53,7 +76,7 @@ Service::Service() {
             auto it = find_if(sensors.begin(), sensors.end(), [&](const Sensor& s){ return s.getId() == stoi(sensorId); });
             // Attribut temporaire (sera mis à jour après chargement des attributs)
             Attribut attr;
-            attr.setId(stoi(attributeId));
+            attr.setId(attributeId);
             if (it != sensors.end()) {
                 Measurement measurement(
                     measurements.size() + 1, // ID auto-incrémenté
@@ -65,25 +88,35 @@ Service::Service() {
                 measurements.push_back(measurement);
             }
         }
+        cout << "Chargement des mesures terminé. Nombre de mesures : " << measurements.size() << endl;
     }
 
     // Chargement des attributs (attributes.csv)
     {
-        ifstream file("attributes.csv");
+        ifstream file("fichiers_csv/attributes.csv");
+        if (!file.is_open()) {
+            cerr << "Erreur lors de l'ouverture du fichier attributes.csv" << endl;
+            return;
+        }
         string line;
         getline(file, line); // skip header
         while (getline(file, line)) {
             stringstream ss(line);
             string attributeId, unit, description;
-            getline(ss, attributeId, ',');
+            getline(ss, attributeId, ';');
+            size_t pos = attributeId.find_first_of("0123456789");
+            if (pos != string::npos) {
+                attributeId = attributeId.substr(pos);
+            }
             getline(ss, unit, ';');
             getline(ss, description, ';');
             Attribut attribut;
-            attribut.setId(stoi(attributeId));
+            attribut.setId(attributeId);
             attribut.setUnit(unit);
             attribut.setDescription(description);
             attributs.push_back(attribut);
         }
+        cout << "Chargement des attributs terminé. Nombre d'attributs : " << attributs.size() << endl;
     }
 
     // Mise à jour des attributs dans les mesures
@@ -96,13 +129,21 @@ Service::Service() {
 
     // Chargement des cleaners (cleaners.csv)
     {
-        ifstream file("cleaners.csv");
+        ifstream file("fichiers_csv/cleaners.csv");
+        if (!file.is_open()) {
+            cerr << "Erreur lors de l'ouverture du fichier cleaners.csv" << endl;
+            return;
+        }
         string line;
         getline(file, line); // skip header
         while (getline(file, line)) {
             stringstream ss(line);
             string cleanerId, lat, lon, start, stop;
             getline(ss, cleanerId, ';');
+            size_t pos = cleanerId.find_first_of("0123456789");
+            if (pos != string::npos) {
+                cleanerId = cleanerId.substr(pos);
+            }
             getline(ss, lat, ';');
             getline(ss, lon, ';');
             getline(ss, start, ';');
@@ -116,11 +157,16 @@ Service::Service() {
             );
             airCleaners.push_back(cleaner);
         }
+        cout << "Chargement des purificateurs d'air terminé. Nombre de purificateurs : " << airCleaners.size() << endl;
     }
 
     // Chargement des providers (providers.csv)
     {
-        ifstream file("providers.csv");
+        ifstream file("fichiers_csv/providers.csv");
+        if (!file.is_open()) {
+            cerr << "Erreur lors de l'ouverture du fichier providers.csv" << endl;
+            return;
+        }
         string line;
         getline(file, line); // skip header
         while (getline(file, line)) {
@@ -128,6 +174,14 @@ Service::Service() {
             string providerId, cleanerId;
             getline(ss, providerId, ';');
             getline(ss, cleanerId, ';');
+            size_t pos = providerId.find_first_of("0123456789");
+            if (pos != string::npos) {
+                providerId = providerId.substr(pos);
+            }
+            pos = cleanerId.find_first_of("0123456789");
+            if (pos != string::npos) {
+                cleanerId = cleanerId.substr(pos);
+            }
             Provider provider;
             provider.setId(stoi(providerId));
             // Trouver le cleaner correspondant à l'ID
@@ -137,11 +191,16 @@ Service::Service() {
             }
             providers.push_back(provider);
         }
+        cout << "Chargement des fournisseurs d'air terminé. Nombre de fournisseurs : " << providers.size() << endl;
     }
 
     // Chargement des utilisateurs privés (users.csv)
     {
-        ifstream file("users.csv");
+        ifstream file("fichiers_csv/users.csv");
+        if (!file.is_open()) {
+            cerr << "Erreur lors de l'ouverture du fichier users.csv" << endl;
+            return;
+        }
         string line;
         getline(file, line); // skip header
         while (getline(file, line)) {
@@ -149,6 +208,14 @@ Service::Service() {
             string userId, sensorId;
             getline(ss, userId, ';');
             getline(ss, sensorId, ';');
+            size_t pos = userId.find_first_of("0123456789");
+            if (pos != string::npos) {
+                userId = userId.substr(pos);
+            }
+            pos = sensorId.find_first_of("0123456789");
+            if (pos != string::npos) {
+                sensorId = sensorId.substr(pos);
+            }
             PrivateIndividual user;
             user.setId(stoi(userId));
             // Trouver le capteur correspondant à l'ID
@@ -159,6 +226,7 @@ Service::Service() {
             privateIndividuals.push_back(user);
         }
     }
+    cout << "Chargement des utilisateurs privés terminé. Nombre d'utilisateurs : " << privateIndividuals.size() << endl;
 }
 
 //Analyser l'impact d’un cleaner

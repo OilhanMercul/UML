@@ -3,7 +3,7 @@
 
 
 //Constructeur
-Attribut::Attribut(int id, const string& unit, const string& description){
+Attribut::Attribut(string id, const string& unit, const string& description){
     this->id = id;
     this->unit = unit;
     this->description = description;
@@ -33,10 +33,10 @@ string Attribut::getDescription() const {
     return this->description;
 }
 
-void Attribut::setId(int id) {
+void Attribut::setId(string id) {
     this->id = id;
 }
 
-int Attribut::getId() const {
+string Attribut::getId() const {
     return this->id;
 }

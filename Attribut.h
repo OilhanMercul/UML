@@ -14,22 +14,22 @@ using namespace std;
 class Attribut {
 protected:
     //Atributes
-    int id;
+    string id;
     string unit;
     string description;
 
 public:
     //Getters and Setters
-    void setId(int id);
+    void setId(string id);
     void setUnit(const string& unit);
     void setDescription(const string& description);
-    int getId() const;
+    string getId() const;
     string getUnit() const;
     string getDescription() const;
 
     //Constructors and Destructor
-    Attribut(int id, const string& unit, const string& description);
-    Attribut() : id(0), unit(""), description("") {}
+    Attribut(string id, const string& unit, const string& description);
+    Attribut() : id(""), unit(""), description("") {}
     Attribut(const Attribut& attribut);
     void print() const {
         cout << "Attribut ID: " << id << endl;
