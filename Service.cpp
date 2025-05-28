@@ -233,19 +233,94 @@ pair<float, float> Service::displayImpactCleaners(const AirCleaner& airCleaner) 
     return {radius, improvement};
 }
 
-pair<float, float> Service::getAirQuality(const string& lat, const string& lon, const Date& date) {
-    vector<Measurement> all = getMeasurementsByDate(date);
-    vector<Measurement> valid;
-    for (const auto& m : all) {
-        Sensor s = m.getSensor();
-        if (s.getLatitude() == lat && s.getLongitude() == lon) {
-            valid.push_back(m);
+float Service::getAirQuality(const string& lat, const string& lon, const Date& date) {
+    vector<Measurement> allMeasurements = getMeasurementsByDate(date);
+    vector<Measurement> closestMeasurements;
+
+    float minDistance = INFINITY;
+
+    for (const Measurement& m : allMeasurements) {
+        Sensor sensor = getSensorByMeasurement(m);
+
+        // Calculer la distance entre le capteur et les coordonnées données
+        float distance = determineDistance(sensor, Sensor(0, lat, lon)); // Sensor temporaire à la position demandée
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestMeasurements.clear();
+            closestMeasurements.push_back(m);
+        } else if (abs(distance - minDistance) < 1e-6) {
+            closestMeasurements.push_back(m);
         }
     }
-    float airQualityIndex = computeAverage(valid);
-    float meanIndex = airQualityIndex;
-    return {airQualityIndex, meanIndex};
+
+    // Grouper les mesures par type de polluant
+    map<string, vector<float>> pollutantValues;
+    for (const Measurement& m : closestMeasurements) {
+        Attribut attr = getInfoAttribute(m);
+        string type = attr.getType();
+        float value = attr.getValue();
+
+        // On ne garde que les attributs pertinents pour l’indice ATMO
+        if (type == "O3" || type == "NO2" || type == "SO2" || type == "PM10") {
+            pollutantValues[type].push_back(value);
+        }
+    }
+
+    // Calculer les moyennes
+    map<string, float> averages;
+    for (const auto& [type, values] : pollutantValues) {
+        float sum = 0;
+        for (float v : values) {
+            sum += v;
+        }
+        averages[type] = values.empty() ? 0 : sum / values.size();
+    }
+
+    // Calculer l’indice ATMO à partir des moyennes
+    return calculateAtmoIndex(averages);
 }
+
+int getIndiceForPollutant(float value, const vector<pair<int,int>>& seuils) {
+    // seuils = vecteur de paires (min, max) pour chaque niveau de 1 à 10
+    for (int i = 0; i < seuils.size(); ++i) {
+        if ((i == seuils.size() - 1 && value >= seuils[i].first) || // dernier seuil inclusif min à l'infini
+            (value >= seuils[i].first && value <= seuils[i].second)) {
+            return i + 1; // indice 1-based
+        }
+    }
+    return 10; // par défaut très mauvais si aucune correspondance
+}
+
+int Service::calculateAtmoIndex(const map<string, float>& averages) {
+    // Seuils ATMO pour chaque polluant (min, max)
+    static const vector<pair<int,int>> seuilsO3 = {
+        {0,29}, {30,54}, {55,79}, {80,104}, {105,129}, {130,149}, {150,179}, {180,209}, {210,239}, {240, INT_MAX}
+    };
+    static const vector<pair<int,int>> seuilsSO2 = {
+        {0,39}, {40,79}, {80,119}, {120,159}, {160,199}, {200,249}, {250,299}, {300,399}, {400,499}, {500, INT_MAX}
+    };
+    static const vector<pair<int,int>> seuilsNO2 = {
+        {0,29}, {30,54}, {55,84}, {85,109}, {110,134}, {135,164}, {165,199}, {200,274}, {275,399}, {400, INT_MAX}
+    };
+    static const vector<pair<int,int>> seuilsPM10 = {
+        {0,6}, {7,13}, {14,20}, {21,27}, {28,34}, {35,41}, {42,49}, {50,64}, {65,79}, {80, INT_MAX}
+    };
+
+    int indiceMax = 1;
+
+    if (averages.count("O3"))
+        indiceMax = max(indiceMax, getIndiceForPollutant(averages.at("O3"), seuilsO3));
+    if (averages.count("SO2"))
+        indiceMax = max(indiceMax, getIndiceForPollutant(averages.at("SO2"), seuilsSO2));
+    if (averages.count("NO2"))
+        indiceMax = max(indiceMax, getIndiceForPollutant(averages.at("NO2"), seuilsNO2));
+    if (averages.count("PM10"))
+        indiceMax = max(indiceMax, getIndiceForPollutant(averages.at("PM10"), seuilsPM10));
+
+    return indiceMax;
+}
+
 
 
 // À implémenter : Récupérer les mesures proches d’un point (ex. dans un rayon de 1km)
