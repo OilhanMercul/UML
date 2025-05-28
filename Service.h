@@ -15,7 +15,6 @@
 #include <string>
 #include <algorithm>
 #include <cmath>
-#include <corecrt_math_defines.h>
 
 
 using namespace std;
