@@ -1,11 +1,12 @@
 #include "PrivateIndividual.h"
 
 PrivateIndividual::PrivateIndividual(int id, const string& password, const string& email, const string& firstName, const string& lastName, const string& phone, const string& address)
-    : User(id, password, email), firstName(firstName), lastName(lastName), phone(phone), address(address), points(0), reliable(false) {
+    : User(id, password, email), points(0), address(address), firstName(firstName), lastName(lastName), phone(phone), reliable(false) {
 }
 
 PrivateIndividual::PrivateIndividual(const PrivateIndividual& privateIndividual)
-    : User(privateIndividual), firstName(privateIndividual.firstName), lastName(privateIndividual.lastName), phone(privateIndividual.phone), address(privateIndividual.address), points(privateIndividual.points), reliable(privateIndividual.reliable) {
+    : User(privateIndividual), points(privateIndividual.points), address(privateIndividual.address),firstName(privateIndividual.firstName), lastName(privateIndividual.lastName), phone(privateIndividual.phone), sensors(privateIndividual.sensors), reliable(privateIndividual.reliable) {
+
 }
 
 void PrivateIndividual::setFirstName(const string& firstName) {

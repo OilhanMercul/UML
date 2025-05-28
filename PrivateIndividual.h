@@ -15,13 +15,14 @@ using namespace std;
 class PrivateIndividual : public User {
 protected:
     //Attributes
+    int points;
+    string address;
     string firstName;
     string lastName;
     string phone;
     list<Sensor> sensors;
-    int points;
     bool reliable;
-    string address;
+
 
 
 public:
@@ -46,7 +47,7 @@ public:
 
     //Constructors and Destructor
     PrivateIndividual(int id, const string& password, const string& email, const string& firstName, const string& lastName, const string& phone, const string& address);
-    PrivateIndividual() : User(), firstName(""), lastName(""), phone(""), address(""), points(0), reliable(true) {};
+    PrivateIndividual() : User(), points(0), address(""), firstName(""), lastName(""), phone(""), reliable(true) {};
     PrivateIndividual(const PrivateIndividual& privateIndividual);
 
     //Methods
