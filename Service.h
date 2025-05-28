@@ -1,7 +1,7 @@
 #ifndef SERVICE_H
 #define SERVICE_H
 
-
+#define _USE_MATH_DEFINES
 #include "Sensor.h"
 #include "Measurement.h"
 #include "AirCleaner.h"
@@ -15,7 +15,6 @@
 #include <string>
 #include <algorithm>
 #include <cmath>
-#include <corecrt_math_defines.h>
 
 using namespace std;
 
