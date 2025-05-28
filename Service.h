@@ -1,15 +1,22 @@
 #ifndef SERVICE_H
 #define SERVICE_H
 
-#include <vector>
-#include <string>
-#include <utility>
+
 #include "Sensor.h"
 #include "Measurement.h"
 #include "AirCleaner.h"
 #include "Attribut.h"
 #include "PrivateIndividual.h"
 #include "Provider.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <cmath>
+#include <corecrt_math_defines.h>
+
 
 using namespace std;
 

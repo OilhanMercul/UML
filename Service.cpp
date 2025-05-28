@@ -1,18 +1,4 @@
 #include "Service.h"
-#include "Sensor.h"
-#include "Measurement.h"
-#include "AirCleaner.h"
-#include "Attribut.h"
-#include "PrivateIndividual.h"
-#include "Provider.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <cmath>
-using namespace std;
 
 
 // Constructeur par défaut
