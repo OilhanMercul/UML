@@ -27,6 +27,9 @@ public:
     string getUnit() const;
     string getDescription() const;
 
+    //Operator
+    Attribut& operator=(const Attribut& other);
+
     //Constructors and Destructor
     Attribut(string id, const string& unit, const string& description);
     Attribut() : id(""), unit(""), description("") {}

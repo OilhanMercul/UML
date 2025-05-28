@@ -40,3 +40,12 @@ void Attribut::setId(string id) {
 string Attribut::getId() const {
     return this->id;
 }
+
+Attribut& Attribut::operator=(const Attribut& other) {
+    if (this != &other) {
+        this->id = other.id;
+        this->unit = other.unit;
+        this->description = other.description;
+    }
+    return *this;
+}

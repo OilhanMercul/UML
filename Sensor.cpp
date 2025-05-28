@@ -35,3 +35,12 @@ void Sensor::setLongitude(const string& longitude) {
 string Sensor::getLongitude() const {
     return this->longitude;
 }
+
+Sensor& Sensor::operator=(const Sensor& other) {
+    if (this != &other) {
+        this->id = other.id;
+        this->latitude = other.latitude;
+        this->longitude = other.longitude;
+    }
+    return *this;
+}
