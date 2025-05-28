@@ -27,36 +27,11 @@ void testServiceSensorParsing_validInput() {
     assert(!sensors.empty());
 
     auto it = find_if(sensors.begin(), sensors.end(),
-                      [](const Sensor& s) { return s.getId() == "Sensor42"; });
+                      [](const Sensor& s) { return s.getId() == 42; });
 
     assert(it != sensors.end());
     assert(it->getLatitude() == "48.858844");
     assert(it->getLongitude() == "2.294351");
-
-    cout << "✓ Passed\n" << endl;
-}
-
-
-void testServiceMeasurementParsing_missingValues() {
-    cout << "testServiceMeasurementParsing_missingValues" << endl;
-
-    // Prépare un Service avec un fichier csv invalide pour les mesures
-    // Par exemple : modifier temporairement le fichier "measurement.csv"
-    // ou simuler cela avec un fichier de test (recommandé)
-
-    try {
-        Service service("sensors.csv", "bad_measurements.csv", "attributes.csv", ...);
-
-        // Selon ton implémentation :
-        // - soit les lignes incorrectes sont ignorées => vérifie leur absence
-        // - soit une exception est levée => le test échoue s'il n'y en a pas
-
-        assert(false && "Expected exception not thrown for malformed CSV");
-    } catch (const ParseException& e) {
-        cout << "✓ Exception capturée : " << e.what() << endl;
-    } catch (...) {
-        assert(false && "Wrong exception type");
-    }
 
     cout << "✓ Passed\n" << endl;
 }
@@ -111,7 +86,6 @@ int main() {
 
     cout << "=== Tests Data Parsing ===" << endl;
     testServiceSensorParsing_validInput();
-    testServiceMeasurementParsing_missingValues();
 
     cout << "=== Tests Air Quality Aggregation ===" << endl;
     testMeanO3Calculation_singleSensor();
