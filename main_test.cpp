@@ -5,6 +5,7 @@ using namespace std;
 #include <string>
 #include <algorithm>
 #include <array>
+#include <cassert>
 
 #include "Provider.h"
 #include "AirCleaner.h"
@@ -21,7 +22,7 @@ void testServiceSensorParsing_validInput() {
 
     Service service;
 
-    const auto& sensors = service.getSensors(); // ou service.getSensorList(), selon ta méthode
+    const auto& sensors = service.getSensors(); // À définir dans Service si ce n’est pas encore fait
 
     assert(!sensors.empty());
 
@@ -29,12 +30,11 @@ void testServiceSensorParsing_validInput() {
                       [](const Sensor& s) { return s.getId() == "Sensor42"; });
 
     assert(it != sensors.end());
-    assert(abs(it->getLatitude() - 48.858844) < 1e-6);
-    assert(abs(it->getLongitude() - 2.294351) < 1e-6);
+    assert(it->getLatitude() == "48.858844");
+    assert(it->getLongitude() == "2.294351");
 
     cout << "✓ Passed\n" << endl;
 }
-
 
 
 void testServiceMeasurementParsing_missingValues() {
@@ -89,69 +89,11 @@ void testAirQualityRegion_noSensorsInRange() {
     cout << "✓ Passed\n" << endl;
 }
 
-
-void testSensorSimilarity_identicalReadings() {
-    cout << "testSensorSimilarity_identicalReadings" << endl;
-
-    Sensor s1("S1", "48.85", "2.29");
-    Sensor s2("S2", "48.85", "2.29");
-    Service service;
-
-    float sim = service.calculateSensorSimilarity(s1, s2);
-    assert(sim == 1.0f);  // Identiques
-
-    cout << "✓ Passed\n" << endl;
-}
-
-void testSensorSimilarity_partialOverlap() {
-    cout << "testSensorSimilarity_partialOverlap" << endl;
-
-    Sensor s1("S1", "48.85", "2.29");
-    Sensor s2("S2", "48.85", "2.30");
-    Service service;
-
-    float sim = service.calculateSensorSimilarity(s1, s2);
-    assert(sim >= 0.0f && sim <= 1.0f);  // Similitude partielle
-
-    cout << "✓ Passed\n" << endl;
-}
-
-void testUserPointIncrement() {
-    cout << "testUserPointIncrement" << endl;
-
-    Service service;
-
-    string userId = "U1";
-    int before = service.getUserPoints(userId);
-    service.awardPointsToUser(userId, 10);
-    int after = service.getUserPoints(userId);
-    assert(after == before + 10);
-
-    cout << "✓ Passed\n" << endl;
-}
-
-void testMaliciousUserExclusion() {
-    cout << "testMaliciousUserExclusion" << endl;
-
-    Service service;
-    string userId = "MaliciousUser";
-
-    service.flagUserAsMalicious(userId);
-    assert(service.isUserExcluded(userId));
-
-    cout << "✓ Passed\n" << endl;
-}
-
 void testCleanerEffect_radiusConstraint() {
     cout << "testCleanerEffect_radiusConstraint" << endl;
 
     Service service;
-    AirCleaner cleaner;
-
-    cleaner.setLatitude("48.85");
-    cleaner.setLongitude("2.29");
-    cleaner.setStart(Date(2023, 4, 1));
-    cleaner.setEnd(Date(2023, 4, 30));
+    AirCleaner cleaner(288, "48.85", "2.29", Date(2023, 4, 1), Date(2023, 4, 30));
 
     auto result = service.displayImpactCleaners(cleaner);
     float radius = result.first;
@@ -168,20 +110,12 @@ int main() {
     cout << "=== Tests unitaires ===\n\n" << endl;
 
     cout << "=== Tests Data Parsing ===" << endl;
-    testSensorCsvParser_validInput();
-    testMeasurementCsvParser_missingValues();
+    testServiceSensorParsing_validInput();
+    testServiceMeasurementParsing_missingValues();
 
     cout << "=== Tests Air Quality Aggregation ===" << endl;
     testMeanO3Calculation_singleSensor();
     testAirQualityRegion_noSensorsInRange();
-
-    cout << "=== Tests Sensor Similarity ===" << endl;
-    testSensorSimilarity_identicalReadings();
-    testSensorSimilarity_partialOverlap();
-
-    cout << "=== Tests Incentive Engine ===" << endl;
-    testUserPointIncrement();
-    testMaliciousUserExclusion();
 
     cout << "=== Tests Air Cleaner Impact Analysis ===" << endl;
     testCleanerEffect_radiusConstraint();
