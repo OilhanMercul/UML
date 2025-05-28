@@ -36,6 +36,7 @@ public:
     string getAddress() const;
     list<Sensor> getSensors() const;
     void setSensors(const list<Sensor>& sensors);
+    void addSensor(const Sensor& sensor) { sensors.push_back(sensor); }
     void setPoints(int points);
     int getPoints() const;
     bool getReliable() const;

@@ -16,6 +16,7 @@ protected:
     string password;
     string email;
 
+public:
     //Getters and Setters
     void setId(int id);
     void setPassword(const string& password);

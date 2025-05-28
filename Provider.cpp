@@ -38,3 +38,7 @@ void Provider::print() const {
     }
 }
 
+void Provider::addAirCleaner(const AirCleaner& airCleaner) {
+    airCleaners.push_back(airCleaner);
+}
+

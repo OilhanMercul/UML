@@ -23,6 +23,7 @@ public:
     string getCompanyName() const;
     void setAirCleaners(const list<AirCleaner>& airCleaners);
     list<AirCleaner> getAirCleaners() const;
+    void addAirCleaner(const AirCleaner& airCleaner);
     virtual void print() const; // Pure virtual function
 
     // Constructors and Destructor

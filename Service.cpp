@@ -1,6 +1,17 @@
 #include "Service.h"
+#include "Sensor.h"
+#include "Measurement.h"
+#include "AirCleaner.h"
+#include "Attribut.h"
+#include "PrivateIndividual.h"
+#include "Provider.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <algorithm>
 #include <cmath>
-#include <corecrt_math_defines.h>
 using namespace std;
 
 
@@ -18,7 +29,7 @@ Service::Service() {
             getline(ss, lat, ';');
             getline(ss, lon, ';');
             Sensor sensor;
-            sensor.setId(id);
+            sensor.setId(stoi(id));
             sensor.setLatitude(lat);
             sensor.setLongitude(lon);
             sensors.push_back(sensor);
@@ -39,16 +50,18 @@ Service::Service() {
             getline(ss, valueStr, ';');
             float value = stof(valueStr);
             // Trouver le capteur correspondant
-            auto it = find_if(sensors.begin(), sensors.end(), [&](const Sensor& s){ return s.getId() == sensorId; });
+            auto it = find_if(sensors.begin(), sensors.end(), [&](const Sensor& s){ return s.getId() == stoi(sensorId); });
             // Attribut temporaire (sera mis à jour après chargement des attributs)
-            Attribut attr(attributeId, "", "");
+            Attribut attr;
+            attr.setId(stoi(attributeId));
             if (it != sensors.end()) {
-                Measurement measurement;
-                measurement.setId(measurements.size() + 1); // ID auto-incrémenté
-                measurement.setDate(Date(stoi(timestamp.substr(0, 4)), stoi(timestamp.substr(5, 2)), stoi(timestamp.substr(8, 2))));
-                measurement.setSensor(*it);
-                measurement.setAttribut(attr);
-                measurement.setValue(value);
+                Measurement measurement(
+                    measurements.size() + 1, // ID auto-incrémenté
+                    Date(stoi(timestamp.substr(0, 4)), stoi(timestamp.substr(5, 2)), stoi(timestamp.substr(8, 2))),
+                    *it,
+                    attr,
+                    value
+                );
                 measurements.push_back(measurement);
             }
         }
@@ -66,7 +79,7 @@ Service::Service() {
             getline(ss, unit, ';');
             getline(ss, description, ';');
             Attribut attribut;
-            attribut.setId(attributeId);
+            attribut.setId(stoi(attributeId));
             attribut.setUnit(unit);
             attribut.setDescription(description);
             attributs.push_back(attribut);
@@ -78,23 +91,6 @@ Service::Service() {
         auto it = find_if(attributs.begin(), attributs.end(), [&](const Attribut& a){ return a.getId() == m.getAttribut().getId(); });
         if (it != attributs.end()) {
             m.setAttribut(*it);
-        }
-    }
-
-    // Chargement des providers (providers.csv)
-    {
-        ifstream file("providers.csv");
-        string line;
-        getline(file, line); // skip header
-        while (getline(file, line)) {
-            stringstream ss(line);
-            string providerId, cleanerId;
-            getline(ss, providerId, ';');
-            getline(ss, cleanerId, ';');
-            Provider provider;
-            provider.setId(providerId);
-            provider.setCleanerId(cleanerId);
-            providers.push_back(provider);
         }
     }
 
@@ -111,13 +107,35 @@ Service::Service() {
             getline(ss, lon, ';');
             getline(ss, start, ';');
             getline(ss, stop, ';');
-            AirCleaner cleaner;
-            cleaner.setId(cleanerId);
-            cleaner.setLatitude(lat);
-            cleaner.setLongitude(lon);
-            cleaner.setStart(Date(stoi(start.substr(0, 4)), stoi(start.substr(5, 2)), stoi(start.substr(8, 2))));
-            cleaner.setEnd(Date(stoi(stop.substr(0, 4)), stoi(stop.substr(5, 2)), stoi(stop.substr(8, 2))));
-            cleaners.push_back(cleaner);
+            AirCleaner cleaner(
+                stoi(cleanerId),
+                lat,
+                lon,
+                Date(stoi(start.substr(0, 4)), stoi(start.substr(5, 2)), stoi(start.substr(8, 2))),
+                Date(stoi(stop.substr(0, 4)), stoi(stop.substr(5, 2)), stoi(stop.substr(8, 2)))
+            );
+            airCleaners.push_back(cleaner);
+        }
+    }
+
+    // Chargement des providers (providers.csv)
+    {
+        ifstream file("providers.csv");
+        string line;
+        getline(file, line); // skip header
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string providerId, cleanerId;
+            getline(ss, providerId, ';');
+            getline(ss, cleanerId, ';');
+            Provider provider;
+            provider.setId(stoi(providerId));
+            // Trouver le cleaner correspondant à l'ID
+            auto itCleaner = find_if(airCleaners.begin(), airCleaners.end(), [&](const AirCleaner& c){ return c.getId() == stoi(cleanerId); });
+            if (itCleaner != airCleaners.end()) {
+                provider.addAirCleaner(*itCleaner); 
+            }
+            providers.push_back(provider);
         }
     }
 
@@ -131,9 +149,13 @@ Service::Service() {
             string userId, sensorId;
             getline(ss, userId, ';');
             getline(ss, sensorId, ';');
-            PrivateIndividual user();
-            user.setId(userId);
-            user.setSensor(sensorId);
+            PrivateIndividual user;
+            user.setId(stoi(userId));
+            // Trouver le capteur correspondant à l'ID
+            auto itSensor = find_if(sensors.begin(), sensors.end(), [&](const Sensor& s){ return s.getId() == stoi(sensorId); });
+            if (itSensor != sensors.end()) {
+                user.addSensor({*itSensor}); // Ajouter le capteur à l'utilisateur
+            }
             privateIndividuals.push_back(user);
         }
     }

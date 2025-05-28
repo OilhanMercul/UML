@@ -86,7 +86,36 @@ void ConsultQualityOfAir() {
     cout << "Consulting the quality of the air..." << endl;
     Service service;
 
-    
+    cout << "List of Sensors:" << endl;
+    for (const auto& sensor : service.getSensors()) {
+        sensor.print();
+    }
+
+    cout << "\nList of Providers:" << endl;
+    for (const auto& provider : service.getProviders()) {
+        provider.print();
+    }
+
+    cout << "\nList of Private Individuals:" << endl;
+    for (const auto& individual : service.getPrivateIndividuals()) {
+        individual.print();
+    }
+
+    cout << "\nList of Air Cleaners:" << endl;
+    for (const auto& airCleaner : service.getAirCleaners()) {
+        airCleaner.print();
+    }
+
+    cout << "\nList of Measurements:" << endl;
+    for (const auto& measurement : service.getMeasurements()) {
+        cout << "Measurement ID: " << measurement.getId() << endl;
+        // Add more details if needed
+    }
+
+    cout << "\nList of Attributes:" << endl;
+    for (const auto& attribut : service.getAttributs()) {
+        attribut.print();
+    }
 
 }
 
@@ -105,7 +134,7 @@ void menuAgent(){
         cin >> choix;
 
         switch (choix) {
-            case 1: // On doit faire ca
+            case 1: ConsultQualityOfAir();// On doit faire ca
             break;
             case 2: break;
             case 3: break;

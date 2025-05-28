@@ -2,7 +2,7 @@
 EXEC = main
 
 # Fichiers source
-SRC = main.cpp Provider.cpp User.cpp AirCleaner.cpp PrivateIndividual.cpp Attribut.cpp Measurement.cpp Sensor.cpp 
+SRC = main.cpp Provider.cpp User.cpp AirCleaner.cpp PrivateIndividual.cpp Attribut.cpp Measurement.cpp Sensor.cpp Service.cpp 
 
 # Options du compilateur
 CXX = g++

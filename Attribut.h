@@ -31,6 +31,11 @@ public:
     Attribut(int id, const string& unit, const string& description);
     Attribut() : id(0), unit(""), description("") {}
     Attribut(const Attribut& attribut);
+    void print() const {
+        cout << "Attribut ID: " << id << endl;
+        cout << "Unit: " << unit << endl;
+        cout << "Description: " << description << endl;
+    }
 
 };
 

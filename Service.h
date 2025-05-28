@@ -8,7 +8,6 @@
 #include "Measurement.h"
 #include "AirCleaner.h"
 #include "Attribut.h"
-#include <corecrt_math_defines.h>
 #include "PrivateIndividual.h"
 #include "Provider.h"
 
@@ -21,6 +20,13 @@ public:
     // Primary methods
     pair<float, float> displayImpactCleaners(const AirCleaner& airCleaner);
     pair<float, float> getAirQuality(const string& lat, const string& lon, const Date& date);
+
+    const vector<AirCleaner>& getAirCleaners() const { return airCleaners; }
+    const vector<Sensor>& getSensors() const { return sensors; }
+    const vector<Measurement>& getMeasurements() const { return measurements; }
+    const vector<Attribut>& getAttributs() const { return attributs; }
+    const vector<PrivateIndividual>& getPrivateIndividuals() const { return privateIndividuals; }
+    const vector<Provider>& getProviders() const { return providers; }
 
 private:
     vector<AirCleaner> airCleaners;
