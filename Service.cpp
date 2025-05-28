@@ -247,6 +247,9 @@ pair<float, float> Service::getAirQuality(const string& lat, const string& lon, 
     return {airQualityIndex, meanIndex};
 }
 
+
+// À implémenter : Récupérer les mesures proches d’un point (ex. dans un rayon de 1km)
+// Ca à l'aire correct
 vector<Measurement> Service::getMeasurementsNear(const string& lat, const string& lon) {
     vector<Measurement> result;
     float centerLat = stof(lat);
@@ -273,6 +276,8 @@ vector<Measurement> Service::getMeasurementsNear(const string& lat, const string
     return result;
 }
 
+//Obtenir les mesures à une date précise
+// Ca à l'aire ok
 vector<Measurement> Service::getMeasurementsByDate(const Date& date) {
     vector<Measurement> result;
     for (const auto& m : measurements) {
@@ -293,6 +298,8 @@ Attribut Service::getInfoAttribute(const Measurement& m) {
     return m.getAttribut();
 }
 
+//Calculer la moyenne des valeurs de pollution
+// PAS BON il faut pas sommer les differents attributs ensemble il faut sommer les même attributs
 float Service::computeAverage(const vector<Measurement>& data) {
     if (data.empty()) return 0.0f;
     float sum = 0.0f;
@@ -325,7 +332,7 @@ float Service::determineDistance(const Sensor& s1, const Sensor& s2) {
 }
 
 vector<Measurement> Service::getMeasurementsBySensor(const Sensor& s) {
-    std::vector<Measurement> result;
+    vector<Measurement> result;
     for (const auto& m : measurements) {
         if (m.getSensor().getId() == s.getId()) {
             result.push_back(m);
