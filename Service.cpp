@@ -248,6 +248,7 @@ float Service::getAirQuality(const string& lat, const string& lon, const Date& d
 }
 
 
+
 // À implémenter : Récupérer les mesures proches d’un point (ex. dans un rayon de 1km)
 // Ca à l'air correct
 vector<Measurement> Service::getMeasurementsNear(const string& lat, const string& lon) {

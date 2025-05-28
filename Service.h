@@ -44,6 +44,8 @@ private:
     vector<PrivateIndividual> privateIndividuals;
     vector<Provider> providers;
 
+    int calculateAtmoIndex(const map<string, float> &averages);
+
     // Helper methods
     vector<Measurement> getMeasurementsNear(const string& lat, const string& lon);
     vector<Measurement> getMeasurementsByDate(const Date& date);
