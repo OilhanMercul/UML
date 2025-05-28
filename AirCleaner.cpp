@@ -1,11 +1,3 @@
-using namespace std;
-#include <iostream>
-#include <map>
-#include <fstream>
-#include <string>
-#include <algorithm>
-#include  <array>
-
 #include "AirCleaner.h"
 
 AirCleaner::AirCleaner(int id, const string& lat, const string& lon, const Date& start, const Date& end){

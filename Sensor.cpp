@@ -1,11 +1,3 @@
-using namespace std;
-#include <iostream>
-#include <map>
-#include <fstream>
-#include <string>
-#include <algorithm>
-#include <array>
-
 #include "Sensor.h"
 
 Sensor::Sensor(int id, const string& latitude, const string& longitude) {

@@ -8,6 +8,9 @@
 #include "Measurement.h"
 #include "AirCleaner.h"
 #include "Attribut.h"
+#include <corecrt_math_defines.h>
+#include "PrivateIndividual.h"
+#include "Provider.h"
 
 using namespace std;
 

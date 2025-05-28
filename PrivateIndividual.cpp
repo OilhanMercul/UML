@@ -1,11 +1,3 @@
-using namespace std;
-#include <iostream>
-#include <map>
-#include <fstream>
-#include <string>
-#include <algorithm>
-#include  <array>
-
 #include "PrivateIndividual.h"
 
 PrivateIndividual::PrivateIndividual(int id, const string& password, const string& email, const string& firstName, const string& lastName, const string& phone, const string& address)
@@ -52,7 +44,14 @@ void PrivateIndividual::setSensors(const list<Sensor>& sensors) {
     this->sensors = sensors;
 }
 
-list<Sensor> PrivateIndividual::getSensors() const {
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * @brief Get the list of sensors associated with this private individual.
+ *
+ * @return A list of Sensor objects representing the sensors associated with
+ *         this private individual.
+ */
+/*******  15853ca7-430a-4078-bd4f-bd3e6d636115  *******/list<Sensor> PrivateIndividual::getSensors() const {
     return this->sensors;
 }
 
