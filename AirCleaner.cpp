@@ -16,6 +16,8 @@ AirCleaner::AirCleaner(int id, const string& lat, const string& lon, const Date&
     this->end = end;
 }
 
+
+
 AirCleaner::AirCleaner(const AirCleaner& aircleaner) {
     this->id = aircleaner.id;
     this->latitude = aircleaner.latitude;

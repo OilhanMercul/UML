@@ -21,8 +21,8 @@ class AirCleaner {
 protected:
     // Attributs
     int id;
-    std::string latitude;
-    std::string longitude;
+    string latitude;
+    string longitude;
     Date start;
     Date end;
 
@@ -51,6 +51,7 @@ public:
     //Constructors and Destructor    
     AirCleaner(int id, const string& lat, const string& lon, const Date& start, const Date& end);
     AirCleaner(const AirCleaner& aircleaner);
+
     ~AirCleaner();
 };
 

@@ -6,7 +6,137 @@ using namespace std;
 
 // Constructeur par défaut
 Service::Service() {
-    
+    // Chargement des capteurs (sensor.csv)
+    {
+        ifstream file("sensor.csv");
+        string line;
+        getline(file, line); // skip header
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string id, lat, lon;
+            getline(ss, id, ';');
+            getline(ss, lat, ';');
+            getline(ss, lon, ';');
+            Sensor sensor;
+            sensor.setId(id);
+            sensor.setLatitude(lat);
+            sensor.setLongitude(lon);
+            sensors.push_back(sensor);
+        }
+    }
+
+    // Chargement des mesures (measurements.csv)
+    {
+        ifstream file("measurements.csv");
+        string line;
+        getline(file, line); // skip header
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string timestamp, sensorId, attributeId, valueStr;
+            getline(ss, timestamp, ';');
+            getline(ss, sensorId, ';');
+            getline(ss, attributeId, ';');
+            getline(ss, valueStr, ';');
+            float value = stof(valueStr);
+            // Trouver le capteur correspondant
+            auto it = find_if(sensors.begin(), sensors.end(), [&](const Sensor& s){ return s.getId() == sensorId; });
+            // Attribut temporaire (sera mis à jour après chargement des attributs)
+            Attribut attr(attributeId, "", "");
+            if (it != sensors.end()) {
+                Measurement measurement;
+                measurement.setId(measurements.size() + 1); // ID auto-incrémenté
+                measurement.setDate(Date(stoi(timestamp.substr(0, 4)), stoi(timestamp.substr(5, 2)), stoi(timestamp.substr(8, 2))));
+                measurement.setSensor(*it);
+                measurement.setAttribut(attr);
+                measurement.setValue(value);
+                measurements.push_back(measurement);
+            }
+        }
+    }
+
+    // Chargement des attributs (attributes.csv)
+    {
+        ifstream file("attributes.csv");
+        string line;
+        getline(file, line); // skip header
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string attributeId, unit, description;
+            getline(ss, attributeId, ',');
+            getline(ss, unit, ';');
+            getline(ss, description, ';');
+            Attribut attribut;
+            attribut.setId(attributeId);
+            attribut.setUnit(unit);
+            attribut.setDescription(description);
+            attributs.push_back(attribut);
+        }
+    }
+
+    // Mise à jour des attributs dans les mesures
+    for (auto& m : measurements) {
+        auto it = find_if(attributs.begin(), attributs.end(), [&](const Attribut& a){ return a.getId() == m.getAttribut().getId(); });
+        if (it != attributs.end()) {
+            m.setAttribut(*it);
+        }
+    }
+
+    // Chargement des providers (providers.csv)
+    {
+        ifstream file("providers.csv");
+        string line;
+        getline(file, line); // skip header
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string providerId, cleanerId;
+            getline(ss, providerId, ';');
+            getline(ss, cleanerId, ';');
+            Provider provider;
+            provider.setId(providerId);
+            provider.setCleanerId(cleanerId);
+            providers.push_back(provider);
+        }
+    }
+
+    // Chargement des cleaners (cleaners.csv)
+    {
+        ifstream file("cleaners.csv");
+        string line;
+        getline(file, line); // skip header
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string cleanerId, lat, lon, start, stop;
+            getline(ss, cleanerId, ';');
+            getline(ss, lat, ';');
+            getline(ss, lon, ';');
+            getline(ss, start, ';');
+            getline(ss, stop, ';');
+            AirCleaner cleaner;
+            cleaner.setId(cleanerId);
+            cleaner.setLatitude(lat);
+            cleaner.setLongitude(lon);
+            cleaner.setStart(Date(stoi(start.substr(0, 4)), stoi(start.substr(5, 2)), stoi(start.substr(8, 2))));
+            cleaner.setEnd(Date(stoi(stop.substr(0, 4)), stoi(stop.substr(5, 2)), stoi(stop.substr(8, 2))));
+            cleaners.push_back(cleaner);
+        }
+    }
+
+    // Chargement des utilisateurs privés (users.csv)
+    {
+        ifstream file("users.csv");
+        string line;
+        getline(file, line); // skip header
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string userId, sensorId;
+            getline(ss, userId, ';');
+            getline(ss, sensorId, ';');
+            PrivateIndividual user();
+            user.setId(userId);
+            user.setSensor(sensorId);
+            privateIndividuals.push_back(user);
+        }
+    }
 }
 
 //Analyser l'impact d’un cleaner

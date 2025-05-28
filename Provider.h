@@ -27,6 +27,7 @@ public:
 
     // Constructors and Destructor
     Provider(int id, const string& password, const string& email, const string& name);
+    Provider() : User(), companyName("") {};
     Provider(const Provider& user);
 };
 

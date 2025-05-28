@@ -17,7 +17,7 @@ using namespace std;
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include  <array>
+#include <array>
 
 //------------------------------------------------------ Include personnel
 #include "Provider.h"
@@ -33,6 +33,7 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 void test() {
+    cout << "\033[48;5;236m"; // Change le background en gris foncé (code 236)
     cout << "\033[1;32mTest function called.\033[0m" << endl;
     cout << "\033[1;34m---------------------\033[0m" << endl;
 
@@ -78,6 +79,15 @@ void test() {
     cout << "Measurement Attribut: " << measurement.getAttribut().getId() << endl;
     cout << "Measurement Value: " << measurement.getValue() << endl;
     cout << "\033[1;34m---------------------\033[0m" << endl;
+
+}
+
+void ConsultQualityOfAir() {
+    cout << "Consulting the quality of the air..." << endl;
+    Service service;
+
+    
+
 }
 
 void menuAgent(){
@@ -95,10 +105,12 @@ void menuAgent(){
         cin >> choix;
 
         switch (choix) {
-            case 1: break;
+            case 1: // On doit faire ca
+            break;
             case 2: break;
             case 3: break;
-            case 4: break;
+            case 4: // On fait
+            break;
             case 5: break;
             case 6: break;
             case 0: return;

@@ -45,6 +45,7 @@ public:
 
     //Constructors and Destructor
     PrivateIndividual(int id, const string& password, const string& email, const string& firstName, const string& lastName, const string& phone, const string& address);
+    PrivateIndividual() : User(), firstName(""), lastName(""), phone(""), address(""), points(0), reliable(true) {};
     PrivateIndividual(const PrivateIndividual& privateIndividual);
 
     //Methods

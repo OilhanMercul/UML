@@ -9,29 +9,33 @@
 #include "AirCleaner.h"
 #include "Attribut.h"
 
+using namespace std;
+
 class Service {
 public:
     Service();
 
     // Primary methods
-    std::pair<float, float> displayImpactCleaners(const AirCleaner& airCleaner);
-    std::pair<float, float> getAirQuality(const std::string& lat, const std::string& lon, const Date& date);
+    pair<float, float> displayImpactCleaners(const AirCleaner& airCleaner);
+    pair<float, float> getAirQuality(const string& lat, const string& lon, const Date& date);
 
 private:
-    std::vector<AirCleaner> airCleaners;
-    std::vector<Sensor> sensors;
-    std::vector<Measurement> measurements;
-    std::vector<Attribut> attributs;
+    vector<AirCleaner> airCleaners;
+    vector<Sensor> sensors;
+    vector<Measurement> measurements;
+    vector<Attribut> attributs;
+    vector<PrivateIndividual> privateIndividuals;
+    vector<Provider> providers;
 
     // Helper methods
-    std::vector<Measurement> getMeasurementsNear(const std::string& lat, const std::string& lon);
-    std::vector<Measurement> getMeasurementsByDate(const Date& date);
+    vector<Measurement> getMeasurementsNear(const string& lat, const string& lon);
+    vector<Measurement> getMeasurementsByDate(const Date& date);
     Sensor getSensorByMeasurement(const Measurement& m);
     Attribut getInfoAttribute(const Measurement& m);
-    float computeAverage(const std::vector<Measurement>& data);
+    float computeAverage(const vector<Measurement>& data);
     float calculateImprovement(float before, float after);
     float determineDistance(const Sensor& s1, const Sensor& s2);
-    std::vector<Measurement> getMeasurementsBySensor(const Sensor& s);
+    vector<Measurement> getMeasurementsBySensor(const Sensor& s);
 };
 
 #endif // SERVICE_H

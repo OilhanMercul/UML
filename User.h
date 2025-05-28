@@ -27,6 +27,7 @@ protected:
 
     //Constructors and Destructor
     User(int id, const string& password, const string& email);
+    User() : id(0), password(""), email("") {};
     User(const User& user);
 
 };
