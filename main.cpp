@@ -95,11 +95,21 @@ void ConsultQualityOfAir() {
     cin >> longitude;
     cout << "Enter date (YYYY MM DD): ";
     cin >> date.year >> date.month >> date.day;
-    float quality = service.getAirQuality(latitude, longitude, date);
-    cout << "Air quality at (" << latitude << ", " << longitude << ") on " 
-         << date.year << "-" << date.month << "-" << date.day 
-         << " is: " << quality << " (before), " 
-         << quality << " (after)." << endl;
+    char choice;
+    float radius = 0.0f;
+    cout << "Do you want to specify a radius? (y/n): ";
+    cin >> choice;
+    if (choice == 'y' || choice == 'Y') {
+        cout << "Enter radius (in km): ";
+        cin >> radius;
+    }
+    else {
+        radius = 10; // Default radius
+    }
+    float index = service.getAirQuality(latitude, longitude, date, radius);
+    cout << "Air quality index at (" << latitude << ", " << longitude 
+         << ") on " << date.year << "-" << date.month << "-" << date.day 
+         << " is: " << index << endl;
 }
 
 void ConsultImpactAirCleanner(){
