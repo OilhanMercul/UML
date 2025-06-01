@@ -35,136 +35,74 @@ using namespace std;
 
 Service service;
 
-void test() {
-    cout << "\033[48;5;236m"; // Change le background en gris foncé (code 236)
-    cout << "\033[1;32mTest function called.\033[0m" << endl;
-    cout << "\033[1;34m---------------------\033[0m" << endl;
-
-    cout << "\033[1;33mCreating a Provider object\033[0m" << endl;
-    Provider provider(1, "password", "mail", "name");
-    cout << "\033[1;36mPrinting the provider details\033[0m" << endl;
-    provider.print();
-
-    cout << "\033[1;33m---------------------\033[0m" << endl;
-
-    cout << "\033[1;33mCreating an AirCleaner object\033[0m" << endl;
-    AirCleaner airCleaner(1, "lat", "lon", Date(2023, 10, 1), Date(2023, 10, 31));
-    cout << "\033[1;36mPrinting the air cleaner details\033[0m" << endl;
-    airCleaner.print();
-
-    cout << "\033[1;33m---------------------\033[0m" << endl;
-
-    provider.setAirCleaners({ airCleaner });
-    cout << "\033[1;36mPrinting the provider details again\033[0m" << endl;    
-    provider.print();
-
-    cout << "\033[1;33m---------------------\033[0m" << endl;
-
-    cout << "\033[1;33mCreating a PrivateIndividual object\033[0m" << endl;
-    PrivateIndividual privateIndividual(1, "password", "mail", "firstName", "lastName", "phone", "address");
-    cout << "\033[1;36mPrinting the private individual details\033[0m" << endl;
-    privateIndividual.print();
-
-    cout << "\033[1;34m---------------------\033[0m" << endl;
-
-    cout << "\033[1;33mCreating a Sensor object\033[0m" << endl;
-    Sensor sensor(1, "lat", "lon");
-    cout << "\033[1;36mPrinting the sensor details\033[0m" << endl;
-    sensor.print();
-    cout << "\033[1;34m---------------------\033[0m" << endl;
-
-    cout << "\033[1;33mCreating a Measurement object\033[0m" << endl;
-    Measurement measurement(1, Date(2023, 10, 1), sensor, Attribut("O3", "unit", "description"), 42.0);
-    cout << "\033[1;36mPrinting the measurement details\033[0m" << endl;
-    cout << "Measurement ID: " << measurement.getId() << endl;
-    cout << "Measurement Date: " << measurement.getDate().year << "-" << measurement.getDate().month << "-" << measurement.getDate().day << endl;
-    cout << "Measurement Sensor: " << measurement.getSensor().getId() << endl;
-    cout << "Measurement Attribut: " << measurement.getAttribut().getId() << endl;
-    cout << "Measurement Value: " << measurement.getValue() << endl;
-    cout << "\033[1;34m---------------------\033[0m" << endl;
-
-}
-
 void ConsultQualityOfAir() {
-    cout << "Consulting the quality of the air..." << endl;
+    cout << "\033[48;5;25m\033[1;37mConsulting the quality of the air...\033[0m" << endl;
     string latitude, longitude;
     Date date;
-    cout << "Enter latitude: ";
+    cout << "\033[1;36mEnter latitude: \033[0m";
     cin >> latitude;
-    cout << "Enter longitude: ";
+    cout << "\033[1;36mEnter longitude: \033[0m";
     cin >> longitude;
-    cout << "Enter date (YYYY MM DD): ";
+    cout << "\033[1;36mEnter date (YYYY MM DD): \033[0m";
     cin >> date.year >> date.month >> date.day;
     char choice;
     float radius = 0.0f;
-    cout << "Do you want to specify a radius? (y/n): ";
+    cout << "\033[1;36mDo you want to specify a radius? (y/n): \033[0m";
     cin >> choice;
     if (choice == 'y' || choice == 'Y') {
-        cout << "Enter radius (in km): ";
+        cout << "\033[1;36mEnter radius (in km): \033[0m";
         cin >> radius;
     }
     else {
         radius = 10; // Default radius
     }
     float index = service.getAirQuality(latitude, longitude, date, radius);
-    cout << "Air quality index at (" << latitude << ", " << longitude 
+    cout << "\033[1;33mAir quality index at (" << latitude << ", " << longitude 
          << ") on " << date.year << "-" << date.month << "-" << date.day 
-         << " is: " << index << endl;
+         << " is: " << index << "\033[0m" << endl;
 }
 
 void ConsultImpactAirCleanner(){
-    cout << "Consulting the impact of air cleaners..." << endl;
+    cout << "\033[48;5;236m\033[1;32mConsulting the impact of air cleaners...\033[0m" << endl;
     vector<AirCleaner> cleaners = service.getAirCleaners();
     if (cleaners.empty()) {
-        cout << "No air cleaners available." << endl;
+        cout << "\033[1;31mNo air cleaners available.\033[0m" << endl;
         return;
     }
     for (const auto& cleaner : cleaners) {
+        cout << "\033[1;34m---------------------\033[0m" << endl;
         cleaner.print();
         pair<float, float> impact = service.displayImpactCleaners(cleaner);
-        cout << "Impact of cleaner ID " << cleaner.getId() 
-             << ": Before: " << impact.first 
-             << ", After: " << impact.second << endl;
+        cout << "\033[1;33mImpact of cleaner ID " << cleaner.getId() 
+             << ": \033[1;36mRadius: " << impact.first 
+             << " \033[1;32mImprovement: " << impact.second << "% \033[0m" << endl;
     }
-    cout << "Impact consultation completed." << endl;
+    cout << "\033[1;34mImpact consultation completed.\033[0m" << endl;
 }
 
 void menuAgent(){
     int choix;
     do {
-        cout << "\nDear Agent, choose your action :" << endl;
-        cout << "1. Consult the quality of the air" << endl;
-        cout << "2. Compare a sensor to the other ones" << endl;
-        cout << "3. Consult statistics" << endl;
-        cout << "4. Consult the impact of air cleaners" << endl;
-        cout << "5. Analyse the data of a private individual" << endl;
-        cout << "6. Consult the list of the excluded users" << endl;
-        cout << "0. Go back" << endl;
-        cout << "Choice : ";
+        cout << "\033[48;5;24m\033[1;37m\nDear Agent, choose your action :\033[0m" << endl;
+        cout << "\033[1;36m1. Consult the quality of the air\033[0m" << endl;
+        cout << "\033[1;36m2. Compare a sensor to the other ones\033[0m" << endl;
+        cout << "\033[1;36m3. Consult statistics\033[0m" << endl;
+        cout << "\033[1;36m4. Consult the impact of air cleaners\033[0m" << endl;
+        cout << "\033[1;36m5. Analyse the data of a private individual\033[0m" << endl;
+        cout << "\033[1;36m6. Consult the list of the excluded users\033[0m" << endl;
+        cout << "\033[1;36m0. Go back\033[0m" << endl;
+        cout << "\033[1;33mChoice : \033[0m";
         cin >> choix;
 
         switch (choix) {
-            case 1: ConsultQualityOfAir();
-            break;
-
-            case 2: cout << "Comparing sensors is not implemented yet.\n";
-            break;
-
-            case 3: cout << "Statistics are not implemented yet.\n";
-            break;
-
-            case 4: ConsultImpactAirCleanner();
-            break;
-
-            case 5: cout << "Analyzing private individual data is not implemented yet.\n";
-            break;
-
-            case 6: cout << "Consulting the list of excluded users is not implemented yet.\n";
-            break;
-
+            case 1: ConsultQualityOfAir(); break;
+            case 2: cout << "\033[1;31mComparing sensors is not implemented yet.\033[0m\n"; break;
+            case 3: cout << "\033[1;31mStatistics are not implemented yet.\033[0m\n"; break;
+            case 4: ConsultImpactAirCleanner(); break;
+            case 5: cout << "\033[1;31mAnalyzing private individual data is not implemented yet.\033[0m\n"; break;
+            case 6: cout << "\033[1;31mConsulting the list of excluded users is not implemented yet.\033[0m\n"; break;
             case 0: return;
-
-            default: cout << "Invalid choice. Please choose again :.\n";
+            default: cout << "\033[1;31mInvalid choice. Please choose again :.\033[0m\n";
         }
     } while (choix != 0);
 }
@@ -172,60 +110,49 @@ void menuAgent(){
 void menuFournisseur(){
     int choix;
     do {
-        cout << "\nDear Provider, choose your action :" << endl;
-        cout << "1. Consult the quality of the air" << endl;
-        cout << "2. Compare a sensor to the other ones" << endl;
-        cout << "3. Consult statistics" << endl;
-        cout << "4. Consult the impact of air cleaners" << endl;
-        cout << "0. Go back" << endl;
-        cout << "Choice : ";
+        cout << "\033[48;5;52m\033[1;33m\nDear Provider, choose your action :\033[0m" << endl;
+        cout << "\033[1;36m1. Consult the quality of the air\033[0m" << endl;
+        cout << "\033[1;36m2. Compare a sensor to the other ones\033[0m" << endl;
+        cout << "\033[1;36m3. Consult statistics\033[0m" << endl;
+        cout << "\033[1;36m4. Consult the impact of air cleaners\033[0m" << endl;
+        cout << "\033[1;36m0. Go back\033[0m" << endl;
+        cout << "\033[1;33mChoice : \033[0m";
         cin >> choix;
 
         switch (choix) {
-            case 1: ConsultQualityOfAir();
-            break;
-            case 2: cout << "Comparing sensors is not implemented yet.\n";
-            break;
-            case 3: cout << "Statistics are not implemented yet.\n";
-            break;
-            case 4: ConsultImpactAirCleanner();
-            break;
+            case 1: ConsultQualityOfAir(); break;
+            case 2: cout << "\033[1;31mComparing sensors is not implemented yet.\033[0m\n"; break;
+            case 3: cout << "\033[1;31mStatistics are not implemented yet.\033[0m\n"; break;
+            case 4: ConsultImpactAirCleanner(); break;
             case 0: return;
-            default: cout << "Invalid choice. Please choose again :.\n";
+            default: cout << "\033[1;31mInvalid choice. Please choose again :.\033[0m\n";
         }
     } while (choix != 0);
-    return;
 }
 
 void menuUtilisateur(){
     int choix;
     do {
-        cout << "\nDear User, choose your action :" << endl;
-        cout << "1. Consult the quality of the air" << endl;
-        cout << "2. Compare a sensor to the other ones" << endl;
-        cout << "3. Consult statistics" << endl;
-        cout << "4. Contribute data" << endl;
-        cout << "5. Consult my points" << endl;
-        cout << "6. Consult the data of my own sensors" << endl;
-        cout << "0. Go back" << endl;
-        cout << "Choice : ";
+        cout << "\033[48;5;22m\033[1;36m\nDear User, choose your action :\033[0m" << endl;
+        cout << "\033[1;33m1. Consult the quality of the air\033[0m" << endl;
+        cout << "\033[1;33m2. Compare a sensor to the other ones\033[0m" << endl;
+        cout << "\033[1;33m3. Consult statistics\033[0m" << endl;
+        cout << "\033[1;33m4. Contribute data\033[0m" << endl;
+        cout << "\033[1;33m5. Consult my points\033[0m" << endl;
+        cout << "\033[1;33m6. Consult the data of my own sensors\033[0m" << endl;
+        cout << "\033[1;33m0. Go back\033[0m" << endl;
+        cout << "\033[1;36mChoice : \033[0m";
         cin >> choix;
 
         switch (choix) {
-            case 1: ConsultQualityOfAir();
-            break;
-            case 2: cout << "Comparing sensors is not implemented yet.\n";
-            break;
-            case 3: cout << "Statistics are not implemented yet.\n";
-            break;
-            case 4: cout << "Contributing data is not implemented yet.\n";
-            break;
-            case 5: cout << "Consulting points is not implemented yet.\n";
-            break;
-            case 6: cout << "Consulting my own sensors data is not implemented yet.\n";
-            break;
+            case 1: ConsultQualityOfAir(); break;
+            case 2: cout << "\033[1;31mComparing sensors is not implemented yet.\033[0m\n"; break;
+            case 3: cout << "\033[1;31mStatistics are not implemented yet.\033[0m\n"; break;
+            case 4: cout << "\033[1;31mContributing data is not implemented yet.\033[0m\n"; break;
+            case 5: cout << "\033[1;31mConsulting points is not implemented yet.\033[0m\n"; break;
+            case 6: cout << "\033[1;31mConsulting my own sensors data is not implemented yet.\033[0m\n"; break;
             case 0: return;
-            default: cout << "Invalid choice. Please choose again :.\n";
+            default: cout << "\033[1;31mInvalid choice. Please choose again :.\033[0m\n";
         }
     } while (choix != 0);
 }
@@ -233,22 +160,20 @@ void menuUtilisateur(){
 void afficherMenuConnexion(){
     int choix;
     do {
-        cout << "\nPlease sign in :" << endl;
-        cout << "1. Governmental agency" << endl;
-        cout << "2. Providers" << endl;
-        cout << "3. Private individuals" << endl;
-        cout << "4. Test the app" << endl;
-        cout << "0. Leave the app" << endl;
-        cout << "Choice : ";
+        cout << "\033[48;5;236m\033[1;35m\nPlease sign in :\033[0m" << endl;
+        cout << "\033[1;36m1. Governmental agency\033[0m" << endl;
+        cout << "\033[1;36m2. Providers\033[0m" << endl;
+        cout << "\033[1;36m3. Private individuals\033[0m" << endl;
+        cout << "\033[1;36m0. Leave the app\033[0m" << endl;
+        cout << "\033[1;33mChoice : \033[0m";
         cin >> choix;
 
         switch (choix) {
             case 1: menuAgent(); break;
             case 2: menuFournisseur(); break;
             case 3: menuUtilisateur(); break;
-            case 4: test(); break;
-            case 0: cout << "Goodbye !" << endl; break;
-            default: cout << "Invalid choice. Please choose again :.\n";
+            case 0: cout << "\033[1;32mGoodbye !\033[0m" << endl; break;
+            default: cout << "\033[1;31mInvalid choice. Please choose again :.\033[0m\n";
         }
     } while (choix != 0);
 }

@@ -84,22 +84,38 @@ void testAirQualityRegion_noSensorsInRange() {
     cout << "✓ Passed\n" << endl;
 }
 
-void testCleanerEffect_radiusConstraint() {
-    cout << "testCleanerEffect_radiusConstraint" << endl;
-    // a faire pas opérationnel
+void testCleanerEffect_radiusConstraint(){
+    cout << "testCleanerEffect_highImprovement" << endl;
 
     Service service;
-    AirCleaner cleaner(288, "48.85", "2.29", Date(2023, 4, 1), Date(2023, 4, 30));
-
-    auto result = service.displayImpactCleaners(cleaner);
-    float radius = result.first;
+    // Cleaner1 is expected to have a high improvement (>80%)
+    AirCleaner c1(1, "46.666667", "3.666667", Date(2019, 2, 1), Date(2019, 3, 1));
+    vector<AirCleaner> cleaners = service.getAirCleaners();
+    for (const auto& cleaner : cleaners) {
+        if (cleaner.getId() == 1) {
+            c1 = cleaner;
+            break;
+        }
+    }
+    auto result = service.displayImpactCleaners(c1);
     float improvement = result.second;
+    cout << "Improvement for Cleaner1: " << improvement << "%" << endl;
+    assert(improvement > 80.0f);
+    cout << "✓ Passed\n" << endl;
 
-    cout << "Radius: " << radius << " km, Improvement: " << improvement << "%" << endl;
+    cout << "testCleanerEffect_lowImprovement" << endl;
 
-    assert(radius >= 0.0f);
-    assert(improvement >= -100.0f && improvement <= 100.0f);
-    
+    AirCleaner c0(0, "45.333333", "1.333333", Date(2019, 2, 1), Date(2019, 3, 1));
+    for (const auto& cleaner : cleaners) {
+        if (cleaner.getId() == 0) {
+            c0 = cleaner;
+            break;
+        }
+    }
+    result = service.displayImpactCleaners(c0);
+    improvement = result.second;
+    cout << "Improvement for Cleaner0: " << improvement << "%" << endl;
+    assert(improvement < 5.0f);
     cout << "✓ Passed\n" << endl;
 }
 

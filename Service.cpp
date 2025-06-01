@@ -195,44 +195,73 @@ Service::Service() {
 
 pair<float, float> Service::displayImpactCleaners(const AirCleaner& airCleaner) {
     vector<Measurement> beforeData, duringData, afterData;
+
     string lat = airCleaner.getLatitude();
     string lon = airCleaner.getLongitude();
     Date start = airCleaner.getStart();
     Date end = airCleaner.getEnd();
 
-    vector<Measurement> nearby = getMeasurementsNear(lat, lon);
+    vector<Measurement> nearby;
+    set<int> uniqueSensorIds;
 
+    int radius = 50; // Rayon de 30 km
+
+    for (const auto& m : measurements) {
+        Sensor s = m.getSensor();
+        float sensorLat = stof(s.getLatitude());
+        float sensorLon = stof(s.getLongitude());
+        float centerLat = stof(lat);
+        float centerLon = stof(lon);
+
+        if (m.getDate() > end) {
+            continue;
+        }
+
+        // Calcul de la distance entre le capteur et le point central (formule de Haversine)
+        float dLat = (sensorLat - centerLat) * M_PI / 180.0f;
+        float dLon = (sensorLon - centerLon) * M_PI / 180.0f;
+
+        float a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(centerLat * M_PI / 180.0f) * cos(sensorLat * M_PI / 180.0f) *
+                sin(dLon / 2) * sin(dLon / 2);
+        float c = 2 * atan2(sqrt(a), sqrt(1 - a));
+        float distance = 6371.0f * c; // Distance en kilomètres
+        // Si la mesure est dans le rayon, on la garde
+        if (distance <= radius) {
+            nearby.push_back(m);
+            uniqueSensorIds.insert(s.getId());
+        }
+    }
+
+    for (const auto& id : uniqueSensorIds) {
+        auto it = find_if(sensors.begin(), sensors.end(), [&](const Sensor& s){ return s.getId() == id; });
+        if (it != sensors.end()) {
+        }
+    }
+    
     for (const auto& m : nearby) {
         Date d = m.getDate();
         if (d < start) {
             beforeData.push_back(m);
-        } else if (d > end) {
-            afterData.push_back(m);
         } else {
             duringData.push_back(m);
         }
+
+    }
+
+    if (beforeData.empty() && duringData.empty()) {
+        cerr << "Aucune mesure trouvée dans la zone spécifiée." << endl;
+        return {0.0f, 0.0f};
     }
 
     float avgBefore = computeAtmoIndex(beforeData);
     float avgDuring = computeAtmoIndex(duringData);
     float avgAfter = computeAtmoIndex(afterData);
-    float improvement = calculateImprovement(avgBefore, avgAfter);
 
-    float radius = 0.0f;
-    for (const auto& m : afterData) {
-        Sensor s = m.getSensor();
-        vector<Measurement> otherMs = getMeasurementsBySensor(s);
-        for (const auto& other : otherMs) {
-            float diff = std::fabs(m.getValue() - other.getValue());
-            if (diff <= 0.1f * other.getValue()) {
-                radius = determineDistance(m.getSensor(), other.getSensor());
-            }
-        }
-    }
+    float improvement = calculateImprovement(avgBefore, avgDuring);
 
-    return {radius, improvement};
+    return {static_cast<float>(radius), improvement};
 }
-
 
 float Service::getAirQuality(const string& lat, const string& lon, const Date& date, const int radius) {
     vector<Measurement> all = getMeasurementsByDate(date);
@@ -241,7 +270,6 @@ float Service::getAirQuality(const string& lat, const string& lon, const Date& d
         Sensor s = m.getSensor();
         if (s.getLatitude() == lat && s.getLongitude() == lon) {
             valid.push_back(m);
-            cout << "Sensor ID: " << s.getId() << endl;
         }
     }
     
@@ -265,7 +293,7 @@ float Service::getAirQuality(const string& lat, const string& lon, const Date& d
             float distance = 6371.0f * c; // Distance en kilomètres
             // Si la mesure est dans le rayon, on la garde
             if (distance <= radius) {
-            valid.push_back(m);
+                valid.push_back(m);
             }
         }
 
@@ -276,12 +304,8 @@ float Service::getAirQuality(const string& lat, const string& lon, const Date& d
         }
     }
 
-    for (const auto& m : valid) {
-        cout << "Sensor ID: " << m.getSensor().getId() << " within radius." << "lat: " << m.getSensor().getLatitude() << ", lon: " << m.getSensor().getLongitude() << endl;
-    }
-
     float IndexAtmo = computeAtmoIndex(valid);
-    return {IndexAtmo};
+    return IndexAtmo;
 }
 
 
@@ -361,8 +385,6 @@ float Service::computeAtmoIndex(const vector<Measurement>& data) {
             countIndexByAttr[attrId]++;
         }
     }
-    for (const auto& [attr, sum] : sumIndexByAttr) {
-    }
     float maxAvgIndex = 0.0f;
     for (const auto& [attr, sum] : sumIndexByAttr) {
         float avgIndex = sum / countIndexByAttr[attr];
@@ -371,7 +393,6 @@ float Service::computeAtmoIndex(const vector<Measurement>& data) {
         }
     }
     return maxAvgIndex;
-
 }
 
 int Service::getAtmoIndex(const string& attributeId, float value) {
