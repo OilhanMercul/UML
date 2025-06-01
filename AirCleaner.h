@@ -16,6 +16,8 @@ struct Date {
 
     Date(int y = 0, int m = 0, int d = 0) : year(y), month(m), day(d) {}
 };
+
+
 inline bool operator>(const Date& lhs, const Date& rhs) {
     if (lhs.year != rhs.year) return lhs.year > rhs.year;
     if (lhs.month != rhs.month) return lhs.month > rhs.month;
@@ -27,6 +29,8 @@ inline bool operator<(const Date& lhs, const Date& rhs) {
     if (lhs.month != rhs.month) return lhs.month < rhs.month;
     return lhs.day < rhs.day;
 }
+
+
 class AirCleaner {
 protected:
     // Attributs
@@ -61,6 +65,8 @@ public:
     //Constructors and Destructor    
     AirCleaner(int id, const string& lat, const string& lon, const Date& start, const Date& end);
     AirCleaner(const AirCleaner& aircleaner);
+
+    AirCleaner& operator=(const AirCleaner& other);
 
     ~AirCleaner();
 };

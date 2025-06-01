@@ -17,94 +17,82 @@ using namespace std;
 
 using namespace std;
 
+// Teste que les capteurs sont bien parsés depuis les fichiers
 void testServiceSensorParsing_validInput() {
-    cout << "testServiceSensorParsing_validInput" << endl;
+    cout << "[TEST] Vérification du parsing des capteurs depuis les fichiers..." << endl;
 
     Service service;
 
     const auto& sensors = service.getSensors(); 
 
+    // Vérifie qu'on a au moins un capteur
     assert(!sensors.empty());
 
-    auto it = find_if(sensors.begin(), sensors.end(),
-                      [](const Sensor& s) { return s.getId() == 42; });
+    // Recherche un capteur avec l'ID 42
+    auto it = find_if(sensors.begin(), sensors.end(), [](const Sensor& s) { return s.getId() == 42; });
 
     assert(it != sensors.end());
     assert(it->getLatitude() == "45.6");
     assert(it->getLongitude() == "0.4");
 
-    cout << "✓ Passed\n" << endl;
+    cout << "✓ Capteur ID 42 trouvé avec latitude 45.6 et longitude 0.4\n" << endl;
 }
 
+// Teste le calcul de la qualité de l'air à une position donnée pour une date
 void testAirQuality() {
-    cout << "testAirQuality" << endl;
+    cout << "[TEST] Qualité de l'air à un point donné..." << endl;
 
     Service service;
     Date d(2019, 5, 1);
 
-    /* 
-    Sensor : Sensor47;45.6;3.9;
-
-    Measurements : 
-    2019-05-01 12:00:00;Sensor47;O3;45.08;
-    2019-05-01 12:00:00;Sensor47;NO2;52.36;
-    2019-05-01 12:00:00;Sensor47;SO2;56.65;
-    2019-05-01 12:00:00;Sensor47;PM10;45.09;
-
-    atmo à 7
-
-    Sensor : Sensor37;45.2;3.9;
-
-    2019-01-20 12:00:00;Sensor37;O3;66.2;
-    2019-01-20 12:00:00;Sensor37;NO2;48.78;
-    2019-01-20 12:00:00;Sensor37;SO2;44.26;
-    2019-01-20 12:00:00;Sensor37;PM10;52.77;
-
-    atmo à 8
-    */
-
     float result = service.getAirQuality("45.2", "4.0", d);
-    cout << result << endl;
+    cout << "Qualité de l'air pour (45.2, 4.0) le 2019-05-01 : " << result << endl;
     assert(result == 8.0f);
 
-    cout << "✓ Passed\n" << endl;
+    cout << "✓ Niveau d'ATMO attendu : 8\n" << endl;
 }
 
+// Teste que le système retourne 0 lorsqu'aucun capteur n'est à proximité
 void testAirQualityRegion_noSensorsInRange() {
-    cout << "testAirQualityRegion_noSensorsInRange" << endl;
+    cout << "[TEST] Aucun capteur à proximité, retour attendu : 0..." << endl;
 
-    Service service; // Charge les données
+    Service service;
     Date date(2023, 1, 1);
 
-    // Un point éloigné où aucun capteur n'est proche
     float airQuality = service.getAirQuality("0.0", "0.0", date);
+    cout << "Qualité de l'air pour une zone sans capteur : " << airQuality << endl;
 
     assert(airQuality == 0.0f);
 
-    cout << "✓ Passed\n" << endl;
+    cout << "✓ Aucun capteur trouvé dans la zone, retour correct.\n" << endl;
 }
 
+// Teste l'impact des purificateurs d'air avec des scénarios haut et bas
 void testCleanerEffect_radiusConstraint(){
-    cout << "testCleanerEffect_highImprovement" << endl;
+    cout << "[TEST] Évaluation de l'impact des purificateurs d'air...\n" << endl;
 
     Service service;
-    // Cleaner1 is expected to have a high improvement (>80%)
+
+    // Purificateur censé avoir un impact important (>80%)
+    cout << " - Test avec Cleaner1 (impact attendu élevé)..." << endl;
     AirCleaner c1(1, "46.666667", "3.666667", Date(2019, 2, 1), Date(2019, 3, 1));
     vector<AirCleaner> cleaners = service.getAirCleaners();
+
     for (const auto& cleaner : cleaners) {
         if (cleaner.getId() == 1) {
             c1 = cleaner;
             break;
         }
     }
+
     auto result = service.displayImpactCleaners(c1);
     float improvement = result.second;
-    cout << "Improvement for Cleaner1: " << improvement << "%" << endl;
+    cout << "Amélioration mesurée : " << improvement << "%" << endl;
     assert(improvement > 80.0f);
-    cout << "✓ Passed\n" << endl;
+    cout << "✓ Impact élevé détecté (>80%)\n" << endl;
 
-    cout << "testCleanerEffect_lowImprovement" << endl;
-
+    // Purificateur avec un impact supposé faible (<5%)
+    cout << " - Test avec Cleaner0 (impact attendu faible)..." << endl;
     AirCleaner c0(0, "45.333333", "1.333333", Date(2019, 2, 1), Date(2019, 3, 1));
     for (const auto& cleaner : cleaners) {
         if (cleaner.getId() == 0) {
@@ -112,26 +100,33 @@ void testCleanerEffect_radiusConstraint(){
             break;
         }
     }
+
     result = service.displayImpactCleaners(c0);
     improvement = result.second;
-    cout << "Improvement for Cleaner0: " << improvement << "%" << endl;
+    cout << "Amélioration mesurée : " << improvement << "%" << endl;
     assert(improvement < 5.0f);
-    cout << "✓ Passed\n" << endl;
+    cout << "✓ Faible impact détecté (<5%)\n" << endl;
 }
 
-
+// Point d'entrée des tests
 int main() {
-    cout << "=== Tests unitaires ===\n\n" << endl;
+    cout << "==========================" << endl;
+    cout << "=== Lancement des tests ===" << endl;
+    cout << "==========================\n" << endl;
 
-    cout << "=== Tests Data Parsing ===" << endl;
+    cout << "--- Étape 1 : Parsing des données ---" << endl;
     testServiceSensorParsing_validInput();
 
-    cout << "=== Tests Air Quality Aggregation ===" << endl;
+    cout << "--- Étape 2 : Calcul de la qualité de l'air ---" << endl;
     testAirQuality();
     testAirQualityRegion_noSensorsInRange();
 
-    cout << "=== Tests Air Cleaner Impact Analysis ===" << endl;
+    cout << "--- Étape 3 : Analyse de l'impact des purificateurs ---" << endl;
     testCleanerEffect_radiusConstraint();
+
+    cout << "\n===========================" << endl;
+    cout << "=== Tous les tests OK ! ===" << endl;
+    cout << "===========================\n" << endl;
 
     return 0;
 }

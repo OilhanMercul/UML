@@ -49,3 +49,4 @@ Attribut& Attribut::operator=(const Attribut& other) {
     }
     return *this;
 }
+

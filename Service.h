@@ -54,8 +54,7 @@ private:
     Attribut getInfoAttribute(const Measurement& m);
     float computeAverage(const vector<Measurement>& data);
     float calculateImprovement(float before, float after);
-    float determineDistance(const Sensor& s1, const Sensor& s2);
-    vector<Measurement> getMeasurementsBySensor(const Sensor& s);
+    
 };
 
 #endif // SERVICE_H

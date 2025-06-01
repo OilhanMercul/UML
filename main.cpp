@@ -6,7 +6,7 @@
     e-mail               : $EMAIL$
 *************************************************************************/
 
-//---------- Réalisation de la classe <Main> (fichier User.cpp) ------------
+//---------- Réalisation de la classe <Main> (fichier Main.cpp) ------------
 
 //---------------------------------------------------------------- INCLUDE
 
@@ -27,166 +27,199 @@ using namespace std;
 #include "Attribut.h"
 #include "Service.h"
 #include "Sensor.h"
+
 //------------------------------------------------------------- Constantes
 
-//----------------------------------------------------------------- PUBLIC
+//----------------------------------------------------------------- GLOBAL
 
-//----------------------------------------------------- Méthodes publiques
+Service service; // Instance globale du service, utilisée par les différentes fonctions
 
-Service service;
+//----------------------------------------------------------------- FONCTIONS
 
+void afficherCapteursDisponibles();
+
+
+//--- Fonction permettant de consulter la qualité de l'air en un point donné
 void ConsultQualityOfAir() {
-    cout << "\033[48;5;25m\033[1;37mConsulting the quality of the air...\033[0m" << endl;
+    cout << "\n\033[48;5;25m\033[1;37m[ Consultation de la qualité de l'air ]\033[0m\n";
+    
     string latitude, longitude;
     Date date;
-    cout << "\033[1;36mEnter latitude: \033[0m";
+
+    cout << "\033[1;36mEntrez la latitude : \033[0m";
     cin >> latitude;
-    cout << "\033[1;36mEnter longitude: \033[0m";
+
+    cout << "\033[1;36mEntrez la longitude : \033[0m";
     cin >> longitude;
-    cout << "\033[1;36mEnter date (YYYY MM DD): \033[0m";
+
+    cout << "\033[1;36mEntrez la date (AAAA MM JJ) : \033[0m";
     cin >> date.year >> date.month >> date.day;
+
     char choice;
     float radius = 0.0f;
-    cout << "\033[1;36mDo you want to specify a radius? (y/n): \033[0m";
+
+    cout << "\033[1;36mSouhaitez-vous spécifier un rayon ? (y/n) : \033[0m";
     cin >> choice;
+
     if (choice == 'y' || choice == 'Y') {
-        cout << "\033[1;36mEnter radius (in km): \033[0m";
+        cout << "\033[1;36mEntrez le rayon (en km) : \033[0m";
         cin >> radius;
+    } else {
+        radius = 10; // Rayon par défaut
     }
-    else {
-        radius = 10; // Default radius
-    }
+
     float index = service.getAirQuality(latitude, longitude, date, radius);
-    cout << "\033[1;33mAir quality index at (" << latitude << ", " << longitude 
-         << ") on " << date.year << "-" << date.month << "-" << date.day 
-         << " is: " << index << "\033[0m" << endl;
+    
+    cout << "\n\033[1;33mIndice de qualité de l'air à (" << latitude << ", " << longitude 
+         << ") le " << date.year << "-" << date.month << "-" << date.day 
+         << " : " << index << "\033[0m\n";
 }
 
+//--- Fonction affichant l'impact des purificateurs d'air disponibles
 void ConsultImpactAirCleanner(){
-    cout << "\033[48;5;236m\033[1;32mConsulting the impact of air cleaners...\033[0m" << endl;
+    cout << "\n\033[48;5;236m\033[1;32m[ Analyse de l'effet des purificateurs d'air ]\033[0m\n";
+
     vector<AirCleaner> cleaners = service.getAirCleaners();
+
     if (cleaners.empty()) {
-        cout << "\033[1;31mNo air cleaners available.\033[0m" << endl;
+        cout << "\033[1;31mAucun purificateur d'air disponible.\033[0m\n";
         return;
     }
+
     for (const auto& cleaner : cleaners) {
-        cout << "\033[1;34m---------------------\033[0m" << endl;
-        cleaner.print();
-        pair<float, float> impact = service.displayImpactCleaners(cleaner);
-        cout << "\033[1;33mImpact of cleaner ID " << cleaner.getId() 
-             << ": \033[1;36mRadius: " << impact.first 
-             << " \033[1;32mImprovement: " << impact.second << "% \033[0m" << endl;
+        cout << "\n\033[1;34m---------------------\033[0m\n";
+        cleaner.print(); // Affichage des infos du purificateur
+
+        pair<float, float> impact = service.displayImpactCleaners(cleaner); // Rayon + amélioration
+
+        cout << "\033[1;33mImpact du purificateur ID " << cleaner.getId() 
+             << " : \033[1;36mRayon : " << impact.first 
+             << " km \033[1;32mAmélioration : " << impact.second << "% \033[0m\n";
     }
-    cout << "\033[1;34mImpact consultation completed.\033[0m" << endl;
+
+    cout << "\n\033[1;34mFin de l'analyse.\033[0m\n";
 }
 
+//--- Menu pour un agent gouvernemental
 void menuAgent(){
     int choix;
     do {
-        cout << "\033[48;5;24m\033[1;37m\nDear Agent, choose your action :\033[0m" << endl;
-        cout << "\033[1;36m1. Consult the quality of the air\033[0m" << endl;
-        cout << "\033[1;36m2. Compare a sensor to the other ones\033[0m" << endl;
-        cout << "\033[1;36m3. Consult statistics\033[0m" << endl;
-        cout << "\033[1;36m4. Consult the impact of air cleaners\033[0m" << endl;
-        cout << "\033[1;36m5. Analyse the data of a private individual\033[0m" << endl;
-        cout << "\033[1;36m6. Consult the list of the excluded users\033[0m" << endl;
-        cout << "\033[1;36m0. Go back\033[0m" << endl;
-        cout << "\033[1;33mChoice : \033[0m";
+        cout << "\n\033[48;5;24m\033[1;37mMenu Agent - Choisissez une action :\033[0m\n";
+        cout << "\033[1;36m1. Consulter la qualité de l'air\033[0m\n";
+        cout << "2. Comparer un capteur (non implémenté)\n";
+        cout << "3. Consulter des statistiques (non implémenté)\n";
+        cout << "\033[1;36m4. Voir l'effet des purificateurs\033[0m\n";
+        cout << "5. Analyser un utilisateur (non implémenté)\n";
+        cout << "6. Voir la liste des utilisateurs exclus (non implémenté)\n";
+        cout << "\033[1;36m7. Voir la liste des capteurs\033[0m\n";
+        cout << "0. Retour\n";
+        cout << "\033[1;33mVotre choix : \033[0m";
         cin >> choix;
 
         switch (choix) {
             case 1: ConsultQualityOfAir(); break;
-            case 2: cout << "\033[1;31mComparing sensors is not implemented yet.\033[0m\n"; break;
-            case 3: cout << "\033[1;31mStatistics are not implemented yet.\033[0m\n"; break;
             case 4: ConsultImpactAirCleanner(); break;
-            case 5: cout << "\033[1;31mAnalyzing private individual data is not implemented yet.\033[0m\n"; break;
-            case 6: cout << "\033[1;31mConsulting the list of excluded users is not implemented yet.\033[0m\n"; break;
+            case 7: afficherCapteursDisponibles(); break;
             case 0: return;
-            default: cout << "\033[1;31mInvalid choice. Please choose again :.\033[0m\n";
+            default: cout << "\033[1;31mFonction non disponible ou choix invalide.\033[0m\n";
         }
     } while (choix != 0);
 }
 
+//--- Menu pour un fournisseur de purificateurs
 void menuFournisseur(){
     int choix;
     do {
-        cout << "\033[48;5;52m\033[1;33m\nDear Provider, choose your action :\033[0m" << endl;
-        cout << "\033[1;36m1. Consult the quality of the air\033[0m" << endl;
-        cout << "\033[1;36m2. Compare a sensor to the other ones\033[0m" << endl;
-        cout << "\033[1;36m3. Consult statistics\033[0m" << endl;
-        cout << "\033[1;36m4. Consult the impact of air cleaners\033[0m" << endl;
-        cout << "\033[1;36m0. Go back\033[0m" << endl;
-        cout << "\033[1;33mChoice : \033[0m";
+        cout << "\n\033[48;5;52m\033[1;33mMenu Fournisseur - Choisissez une action :\033[0m\n";
+        cout << "\033[1;36m1. Consulter la qualité de l'air\033[0m\n";
+        cout << "2. Comparer un capteur (non implémenté)\n";
+        cout << "3. Statistiques (non implémenté)\n";
+        cout << "\033[1;36m4. Effet des purificateurs\033[0m\n";
+        cout << "0. Retour\n";
+        cout << "\033[1;33mVotre choix : \033[0m";
         cin >> choix;
 
         switch (choix) {
             case 1: ConsultQualityOfAir(); break;
-            case 2: cout << "\033[1;31mComparing sensors is not implemented yet.\033[0m\n"; break;
-            case 3: cout << "\033[1;31mStatistics are not implemented yet.\033[0m\n"; break;
             case 4: ConsultImpactAirCleanner(); break;
             case 0: return;
-            default: cout << "\033[1;31mInvalid choice. Please choose again :.\033[0m\n";
+            default: cout << "\033[1;31mChoix invalide.\033[0m\n";
         }
     } while (choix != 0);
 }
 
+//--- Fonction affichant la liste des capteurs
+void afficherCapteursDisponibles() {
+    cout << "\n\033[48;5;237m\033[1;36m[ Liste des capteurs disponibles ]\033[0m\n";
+
+    const vector<Sensor>& sensors = service.getSensors();
+
+    if (sensors.empty()) {
+        cout << "\033[1;31mAucun capteur trouvé dans les données.\033[0m\n";
+        return;
+    }
+
+    for (const Sensor& s : sensors) {
+        cout << "\033[1;34mID: \033[0m" << s.getId()
+             << " \033[1;34m| Latitude: \033[0m" << s.getLatitude()
+             << " \033[1;34m| Longitude: \033[0m" << s.getLongitude()
+             << endl;
+    }
+
+    cout << "\n\033[1;32mTotal: " << sensors.size() << " capteurs.\033[0m\n";
+}
+
+
+//--- Menu pour un utilisateur individuel
 void menuUtilisateur(){
     int choix;
     do {
-        cout << "\033[48;5;22m\033[1;36m\nDear User, choose your action :\033[0m" << endl;
-        cout << "\033[1;33m1. Consult the quality of the air\033[0m" << endl;
-        cout << "\033[1;33m2. Compare a sensor to the other ones\033[0m" << endl;
-        cout << "\033[1;33m3. Consult statistics\033[0m" << endl;
-        cout << "\033[1;33m4. Contribute data\033[0m" << endl;
-        cout << "\033[1;33m5. Consult my points\033[0m" << endl;
-        cout << "\033[1;33m6. Consult the data of my own sensors\033[0m" << endl;
-        cout << "\033[1;33m0. Go back\033[0m" << endl;
-        cout << "\033[1;36mChoice : \033[0m";
+        cout << "\n\033[48;5;22m\033[1;36mMenu Utilisateur - Choisissez une action :\033[0m\n";
+        cout << "1. Consulter la qualité de l'air\n";
+        cout << "2. Comparer un capteur (non implémenté)\n";
+        cout << "3. Statistiques (non implémenté)\n";
+        cout << "4. Contribuer des données (non implémenté)\n";
+        cout << "5. Voir mes points (non implémenté)\n";
+        cout << "6. Voir les données de mes capteurs (non implémenté)\n";
+        cout << "0. Retour\n";
+        cout << "\033[1;36mVotre choix : \033[0m";
         cin >> choix;
 
         switch (choix) {
             case 1: ConsultQualityOfAir(); break;
-            case 2: cout << "\033[1;31mComparing sensors is not implemented yet.\033[0m\n"; break;
-            case 3: cout << "\033[1;31mStatistics are not implemented yet.\033[0m\n"; break;
-            case 4: cout << "\033[1;31mContributing data is not implemented yet.\033[0m\n"; break;
-            case 5: cout << "\033[1;31mConsulting points is not implemented yet.\033[0m\n"; break;
-            case 6: cout << "\033[1;31mConsulting my own sensors data is not implemented yet.\033[0m\n"; break;
             case 0: return;
-            default: cout << "\033[1;31mInvalid choice. Please choose again :.\033[0m\n";
+            default: cout << "\033[1;31mFonction non disponible ou choix invalide.\033[0m\n";
         }
     } while (choix != 0);
 }
 
+//--- Menu principal de connexion selon le type d'utilisateur
 void afficherMenuConnexion(){
     int choix;
     do {
-        cout << "\033[48;5;236m\033[1;35m\nPlease sign in :\033[0m" << endl;
-        cout << "\033[1;36m1. Governmental agency\033[0m" << endl;
-        cout << "\033[1;36m2. Providers\033[0m" << endl;
-        cout << "\033[1;36m3. Private individuals\033[0m" << endl;
-        cout << "\033[1;36m0. Leave the app\033[0m" << endl;
-        cout << "\033[1;33mChoice : \033[0m";
+        cout << "\n\033[48;5;236m\033[1;35mConnexion - Qui êtes-vous ?\033[0m\n";
+        cout << "1. Agence gouvernementale\n";
+        cout << "2. Fournisseur\n";
+        cout << "3. Utilisateur individuel\n";
+        cout << "0. Quitter l'application\n";
+        cout << "\033[1;33mVotre choix : \033[0m";
         cin >> choix;
 
         switch (choix) {
             case 1: menuAgent(); break;
             case 2: menuFournisseur(); break;
             case 3: menuUtilisateur(); break;
-            case 0: cout << "\033[1;32mGoodbye !\033[0m" << endl; break;
-            default: cout << "\033[1;31mInvalid choice. Please choose again :.\033[0m\n";
+            case 0: cout << "\033[1;32mMerci d’avoir utilisé AirWatcher. À bientôt !\033[0m\n"; break;
+            default: cout << "\033[1;31mChoix invalide.\033[0m\n";
         }
     } while (choix != 0);
 }
 
 
 
+//--- Point d'entrée du programme
 int main() {
-    
-    cout << "Welcome to AirWatcher !\n";
+    cout << "\n\033[1;32mBienvenue dans l'application AirWatcher 🌿\033[0m\n";
     afficherMenuConnexion();
     return 0;
 }
-
-//------------------------------------------------------------------ PRIVE
-
-//----------------------------------------------------- Méthodes protégées

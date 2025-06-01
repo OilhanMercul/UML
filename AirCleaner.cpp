@@ -59,3 +59,14 @@ void AirCleaner::setStart(const Date& d) {
 void AirCleaner::setEnd(const Date& d) {
     end = d;
 }
+
+AirCleaner& AirCleaner::operator=(const AirCleaner& other) {
+    if (this != &other) {
+        id = other.id;
+        latitude = other.latitude;
+        longitude = other.longitude;
+        start = other.start;
+        end = other.end;
+    }
+    return *this;
+}
