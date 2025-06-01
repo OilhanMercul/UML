@@ -193,6 +193,8 @@ Service::Service() {
     }
 }
 
+
+//A commenter mais ca marche bien !
 pair<float, float> Service::displayImpactCleaners(const AirCleaner& airCleaner) {
     vector<Measurement> beforeData, duringData, afterData;
 
@@ -204,7 +206,7 @@ pair<float, float> Service::displayImpactCleaners(const AirCleaner& airCleaner) 
     vector<Measurement> nearby;
     set<int> uniqueSensorIds;
 
-    int radius = 50; // Rayon de 30 km
+    int radius = 50; // Rayon de 50 km
 
     for (const auto& m : measurements) {
         Sensor s = m.getSensor();
@@ -263,6 +265,7 @@ pair<float, float> Service::displayImpactCleaners(const AirCleaner& airCleaner) 
     return {static_cast<float>(radius), improvement};
 }
 
+//A commenter mais ca marche bien !
 float Service::getAirQuality(const string& lat, const string& lon, const Date& date, const int radius) {
     vector<Measurement> all = getMeasurementsByDate(date);
     vector<Measurement> valid;
@@ -310,7 +313,7 @@ float Service::getAirQuality(const string& lat, const string& lon, const Date& d
 
 
 
-// À implémenter : Récupérer les mesures proches d’un point (ex. dans un rayon de 1km)
+// À supprimer on s'en sert pas 
 vector<Measurement> Service::getMeasurementsNear(const string& lat, const string& lon) {
     vector<Measurement> result;
     float centerLat = stof(lat);
@@ -337,8 +340,7 @@ vector<Measurement> Service::getMeasurementsNear(const string& lat, const string
     return result;
 }
 
-//Obtenir les mesures à une date précise
-// Ca à l'aire ok
+// On s'en sert à garder
 vector<Measurement> Service::getMeasurementsByDate(const Date& date) {
     vector<Measurement> result;
     for (const auto& m : measurements) {
