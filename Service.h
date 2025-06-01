@@ -24,7 +24,7 @@ public:
 
     // Primary methods
     pair<float, float> displayImpactCleaners(const AirCleaner& airCleaner);
-    float getAirQuality(const string& lat, const string& lon, const Date& date);
+    float getAirQuality(const string& lat, const string& lon, const Date& date, const int radius = 10);
 
     const vector<AirCleaner>& getAirCleaners() const { return airCleaners; }
     const vector<Sensor>& getSensors() const { return sensors; }
