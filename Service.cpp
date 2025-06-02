@@ -221,7 +221,7 @@ Service::Service() {
 
 // Affiche l'impact des AirCleaners sur la qualité de l'air autour d'eux
 pair<float, float> Service::displayImpactCleaners(const AirCleaner& airCleaner) {
-    vector<Measurement> beforeData, duringData, afterData;
+    vector<Measurement> beforeData, duringData;
 
     // Récupération des infos du nettoyeur : position et période d'activité
     string lat = airCleaner.getLatitude();
