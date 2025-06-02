@@ -15,8 +15,6 @@ L’ensemble des données (capteurs, mesures, attributs, utilisateurs, purificat
 
 ## Installation
 
-
-
 ### Compilation
 
 À la racine du projet, lancez la commande suivante dans un terminal :
@@ -65,7 +63,6 @@ Les tests couvrent notamment :
 
 ## Fichiers fournis
 
-
 - Fichiers sources et entêtes (`*.cpp` / `*.h`) organisés par module
    - Measurement
    - Attribut
@@ -80,10 +77,6 @@ Les tests couvrent notamment :
 - `Makefile` : script de compilation
 - Fichiers CSV d’exemple (ex: `sensors.csv`, `measurements.csv`, etc.)
 - `README.md` : ce fichier
-
-
-
-## Structure du Code
 
 ## Structure du Code
 
@@ -127,12 +120,12 @@ L’architecture d’AirWatcher suit un modèle en couches (Layered Architecture
 Projet réalisé dans le cadre du cours **Software Engineering Labs - POO2**, INSA Lyon - Département Informatique.
 
 - ANTONIETTI Léa
-- FRANCU Teodor Matei 
+- FRANCU Teodor Matei
 - MERCUL Oilhan
 - VERON Loris
 - VLAD Andreea Cristiana
 
-Groupes binomiaux : B3125 & B312?
+Groupes binomiaux : B3125 & B3121
 
 ## Remarques
 
